@@ -1,7 +1,7 @@
 """
-t031a5 - Sistema OM1 Focado no G1
+t031a5 - Sistema AI Multimodal para G1
 
-Sistema de IA multimodal baseado na arquitetura OM1, otimizado especificamente 
+Sistema de IA multimodal otimizado especificamente 
 para o robô humanóide G1 da Unitree.
 """
 

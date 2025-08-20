@@ -1,8 +1,8 @@
-# t031a5 - Sistema OM1 Focado no G1
+# t031a5 - Sistema AI Multimodal para G1
 
 ## 📋 Resumo do Projeto
 
-**t031a5** é um sistema de IA multimodal avançado especificamente otimizado para o robô humanóide G1 da Unitree. O projeto implementa uma arquitetura modular baseada no OM1, oferecendo capacidades de visão computacional, navegação GPS, monitoramento de estado, controle de movimento, manipulação de braços e sistema de áudio.
+**t031a5** é um sistema de IA multimodal avançado especificamente otimizado para o robô humanóide G1 da Unitree. O projeto implementa uma arquitetura modular, oferecendo capacidades de visão computacional, navegação GPS, monitoramento de estado, controle de movimento, manipulação de braços e sistema de áudio.
 
 ## 🎯 Objetivos Alcançados
 
@@ -269,7 +269,7 @@ Este projeto está sob licença MIT. Veja o arquivo LICENSE para detalhes.
 ## 🙏 Agradecimentos
 
 - **Unitree Robotics**: Pelo desenvolvimento do robô G1
-- **OM1 Community**: Pela arquitetura base
+- **t031a5 Team**: Pela arquitetura modular
 - **Open Source Community**: Pelas bibliotecas utilizadas
 
 ---

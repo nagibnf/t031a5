@@ -2,7 +2,7 @@
 
 ## 📋 Resumo Executivo
 
-O projeto t031a5 - Sistema OM1 Focado no G1 foi desenvolvido com sucesso, implementando um sistema AI multimodal completo para o robô Unitree G1. Todas as funcionalidades principais foram testadas e validadas.
+O projeto t031a5 - Sistema AI Multimodal para G1 foi desenvolvido com sucesso, implementando um sistema AI multimodal completo para o robô Unitree G1. Todas as funcionalidades principais foram testadas e validadas.
 
 ## ✅ Conquistas Principais
 

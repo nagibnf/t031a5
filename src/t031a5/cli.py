@@ -20,7 +20,7 @@ from .runtime import CortexRuntime
 # Configuração do CLI
 app = typer.Typer(
     name="t031a5",
-    help="Sistema OM1 Focado no G1 - Sistema de IA multimodal para o robô humanóide G1 da Unitree",
+    help="Sistema AI Multimodal para G1 - Sistema de IA multimodal para o robô humanóide G1 da Unitree",
     add_completion=False,
 )
 

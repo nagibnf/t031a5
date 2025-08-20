@@ -264,7 +264,7 @@ if __name__ == "__main__":
             print("   1. Execute: python3 -m t031a5.cli run --config g1_integrated.json5")
             print("   2. Acesse: http://localhost:8080")
             print("   3. Use a interface web para controlar o G1")
-            print("   4. O sistema OM1 estará rodando em loop completo!")
+            print("   4. O sistema t031a5 estará rodando em loop completo!")
         else:
             print("❌ Alguns testes falharam")
         
