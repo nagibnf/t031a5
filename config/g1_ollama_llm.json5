@@ -1,0 +1,64 @@
+{
+  "name": "G1 Ollama LLM Configuration",
+  "description": "Configuração de LLM usando Ollama para Tobias (G1) - Jetson Orin NX 16GB",
+  "version": "1.0",
+  "llm": {
+            "primary": {
+          "provider": "ollama",
+          "model": "llama3.1:8b",
+          "host": "localhost",
+          "port": 11434,
+          "temperature": 0.7,
+          "max_tokens": 150,
+          "top_p": 0.9,
+          "context_length": 2048,
+          "timeout": 15.0,
+          "retry_attempts": 2,
+          "response_style": "concise",
+          "max_response_time": 5.0
+        },
+            "fallback": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "api_key": "${OPENAI_API_KEY}",
+          "temperature": 0.7,
+          "max_tokens": 150,
+          "response_style": "concise",
+          "max_response_time": 5.0
+        },
+    "models": {
+      "llama3.1:8b": {
+        "name": "Llama 3.1 8B",
+        "size": "4.5GB",
+        "performance": "fast",
+        "language": ["en", "pt"],
+        "description": "Modelo principal - rápido e eficiente"
+      },
+      "mistral:7b": {
+        "name": "Mistral 7B",
+        "size": "4.1GB",
+        "performance": "fast",
+        "language": ["en", "pt"],
+        "description": "Alternativa rápida"
+      },
+      "llama3.1:70b": {
+        "name": "Llama 3.1 70B",
+        "size": "40GB",
+        "performance": "slow",
+        "language": ["en", "pt"],
+        "description": "Modelo avançado (se houver espaço)"
+      }
+    },
+    "routing": {
+      "online": "openai",
+      "offline": "ollama",
+      "fallback": "ollama",
+      "auto_switch": true,
+      "model_switch": {
+        "enabled": true,
+        "performance_threshold": 5.0,
+        "memory_threshold": 0.8
+      }
+    }
+  }
+}

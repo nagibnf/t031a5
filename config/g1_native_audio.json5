@@ -1,0 +1,26 @@
+{
+  "name": "G1 Native Audio Configuration",
+  "description": "Configuração de áudio nativo para Tobias (G1) - Sistema do Mac",
+  "version": "1.0",
+  "audio": {
+    "system": "native",
+    "platform": "macos",
+    "input": {
+      "device": "built-in",
+      "sample_rate": 16000,
+      "channels": 1,
+      "format": "int16",
+      "chunk_size": 1024
+    },
+    "output": {
+      "device": "built-in",
+      "format": "mp3",
+      "player": "afplay"
+    },
+    "settings": {
+      "timeout": 30.0,
+      "retry_attempts": 3,
+      "volume": 1.0
+    }
+  }
+}

@@ -24,8 +24,8 @@ async def main():
     """Função principal do exemplo."""
     logger.info("🚀 Iniciando exemplo básico do t031a5")
     
-    # Caminho para a configuração básica
-    config_path = Path("config/g1_basic.json5")
+    # Caminho para a configuração de teste
+    config_path = Path("config/g1_test.json5")
     
     if not config_path.exists():
         logger.error(f"Arquivo de configuração não encontrado: {config_path}")

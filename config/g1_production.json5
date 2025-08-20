@@ -1,46 +1,70 @@
+// ========================================
+// CONFIGURAÇÃO: G1 Production
+// ========================================
+// 
+// Baseada em: config/g1_base_complete.json5
+// Criada em: /Users/nagib/t031a5
+// 
+// ========================================
+
 {
-  // Configuração de Produção - G1 Sistema AI Multimodal
-  // Otimizada para performance e estabilidade em produção
-  
-  "name": "G1 Production System",
-  "hertz": 10, // Frequência otimizada para produção
-  "system_prompt_base": "Você é um assistente robótico G1 profissional, capaz de interagir de forma natural através de visão, voz, gestos e movimentos precisos.",
-  
+  "name": "G1 Production",
+  "version": "1.0.0",
+  "description": "Configuração otimizada para produção",
+  "hertz": 5,
+  "system_prompt_base": "Você é um assistente robótico G1 avançado, capaz de controlar hardware físico, processar visão, áudio e movimento. Seja cuidadoso, seguro e útil.",
   "development": {
-    "websim_enabled": true,
+    "websim_enabled": false,
     "debug_mode": false,
-    "hot_reload": false
+    "hot_reload": false,
+    "log_level": "INFO",
+    "performance_monitoring": true
   },
-  
   "g1_specific": {
     "robot_type": "unitree_g1",
     "capabilities": [
       "bipedal_locomotion",
-      "arm_manipulation", 
+      "arm_manipulation",
       "computer_vision",
       "audio_processing",
       "conversational_ai",
-      "emotional_expression"
+      "emotional_expression",
+      "gesture_recognition",
+      "sensor_fusion",
+      "autonomous_navigation",
+      "human_interaction"
     ],
     "safety_mode": true,
-    "emergency_stop_enabled": true
+    "confirmed_features": {
+      "tts_english": true,
+      "tts_chinese": true,
+      "leds_emotions": true,
+      "movement_32": true,
+      "wav_playback": true,
+      "microphone_external": true,
+      "camera_usb": true,
+      "all_18_movements": true,
+      "all_10_fsm_states": true,
+      "locomotion_commands": true
+    }
   },
-  
-  // Sistema de Conversação Integrado
   "conversation_engine": {
     "enabled": true,
     "enable_vision_context": true,
     "enable_gesture_sync": true,
     "enable_emotion_detection": true,
+    "enable_voice_recognition": true,
+    "enable_natural_language": true,
     "conversation_timeout": 30.0,
-    "response_delay": 0.3
+    "response_delay": 0.5,
+    "max_context_length": 1000,
+    "enable_memory": true,
+    "memory_size": 50
   },
-  
-  // Inputs Otimizados para Produção
   "agent_inputs": {
     "G1Voice": {
       "enabled": true,
-      "language": "pt-BR",
+      "language": "en-US",
       "sensitivity": 0.8,
       "noise_suppression": true,
       "continuous_listening": true,
@@ -48,19 +72,43 @@
       "mock_mode": false,
       "microphone_index": 0,
       "sample_rate": 16000,
-      "chunk_size": 1024
+      "chunk_size": 1024,
+      "external_microphone": true,
+      "microphone_type": "external",
+      "voice_activity_detection": true,
+      "speech_recognition": true,
+      "language_detection": true
     },
     "G1Vision": {
       "enabled": true,
       "camera_index": 0,
-      "resolution": [1280, 720],
+      "resolution": [
+        1280,
+        720
+      ],
       "fps": 30,
       "detection_confidence": 0.7,
       "enable_face_detection": true,
       "enable_object_detection": true,
       "enable_motion_detection": true,
+      "enable_ocr": true,
+      "enable_scene_analysis": true,
+      "enable_gesture_recognition": true,
       "mock_mode": false,
-      "face_recognition_distance": 0.6
+      "face_recognition_distance": 0.6,
+      "object_classes": [
+        "person",
+        "chair",
+        "table",
+        "book",
+        "phone",
+        "laptop",
+        "cup",
+        "bottle"
+      ],
+      "motion_threshold": 30,
+      "save_frames": false,
+      "frame_buffer_size": 10
     },
     "G1State": {
       "enabled": true,
@@ -70,154 +118,669 @@
       "enable_battery_monitoring": true,
       "enable_thermal_monitoring": true,
       "enable_safety_monitoring": true,
-      "mock_mode": false
+      "enable_pose_tracking": true,
+      "enable_force_sensing": true,
+      "mock_mode": false,
+      "alert_thresholds": {
+        "battery_low": 20.0,
+        "temperature_high": 60.0,
+        "joint_limit": 0.9
+      }
     },
     "G1Sensors": {
       "enabled": true,
       "update_interval": 0.1,
-      "mock_mode": false
+      "enable_imu": true,
+      "enable_foot_contact": true,
+      "enable_force_sensors": true,
+      "enable_torque_sensors": true,
+      "enable_proximity_sensors": true,
+      "mock_mode": false,
+      "calibration_enabled": true
+    },
+    "G1GPS": {
+      "enabled": true,
+      "update_interval": 1.0,
+      "enable_navigation": true,
+      "enable_waypoint_tracking": true,
+      "enable_route_planning": true,
+      "mock_mode": false,
+      "gps_timeout": 5.0,
+      "accuracy_threshold": 2.0
     }
   },
-  
-  // Actions Otimizadas
   "agent_actions": {
     "G1Speech": {
       "enabled": true,
-      "language": "pt-BR",
-      "voice_type": "professional",
+      "language": "en-US",
+      "voice_type": "friendly",
       "speaking_rate": 1.0,
-      "volume": 0.8,
+      "pitch": 0.0,
+      "volume": 100,
       "emotion_modulation": true,
+      "voice_synthesis": true,
       "mock_mode": false,
-      "engine": "espeak"
+      "engine": "unitree_tts",
+      "speaker_id": 1,
+      "supported_languages": [
+        "en-US",
+        "zh-CN",
+        "pt-BR"
+      ],
+      "wav_playback": true,
+      "wav_format": {
+        "sample_rate": 16000,
+        "channels": 1,
+        "bit_depth": 16
+      },
+      "audio_effects": {
+        "echo": false,
+        "reverb": false,
+        "noise_reduction": true
+      }
     },
     "G1Emotion": {
       "enabled": true,
-      "led_brightness": 0.8,
-      "transition_time": 0.3,
-      "emotion_mapping": {
-        "happy": [0, 255, 0],
-        "focused": [255, 255, 255],
-        "neutral": [128, 128, 128]
+      "emotion_types": [
+        "happy",
+        "sad",
+        "excited",
+        "calm",
+        "neutral",
+        "error",
+        "chinese",
+        "english",
+        "surprised",
+        "angry"
+      ],
+      "led_colors": {
+        "happy": [
+          0,
+          255,
+          0
+        ],
+        "sad": [
+          0,
+          0,
+          255
+        ],
+        "excited": [
+          255,
+          255,
+          0
+        ],
+        "calm": [
+          173,
+          216,
+          230
+        ],
+        "neutral": [
+          255,
+          255,
+          255
+        ],
+        "error": [
+          255,
+          0,
+          0
+        ],
+        "chinese": [
+          255,
+          0,
+          0
+        ],
+        "english": [
+          0,
+          255,
+          0
+        ],
+        "surprised": [
+          255,
+          165,
+          0
+        ],
+        "angry": [
+          255,
+          0,
+          255
+        ]
       },
-      "mock_mode": false
+      "brightness": 1.0,
+      "transition_speed": 0.5,
+      "mock_mode": false,
+      "auto_emotion": true,
+      "emotion_duration": 3.0,
+      "blink_enabled": true
     },
     "G1Movement": {
       "enabled": true,
-      "max_speed": 1.2,
-      "max_turn_speed": 0.6,
-      "safety_distance": 1.0,
-      "enable_obstacle_detection": true,
-      "enable_posture_control": true,
-      "mock_mode": false
+      "movement_speed": 0.5,
+      "movement_smoothness": 0.8,
+      "safety_limits": {
+        "max_speed": 0.5,
+        "max_turn_speed": 0.3,
+        "emergency_stop": true,
+        "collision_detection": true
+      },
+      "mock_mode": false,
+      "confirmed_movements": {
+        "1": "turn_back_wave",
+        "11": "blow_kiss_with_both_hands",
+        "12": "blow_kiss_with_left_hand",
+        "13": "blow_kiss_with_right_hand",
+        "15": "both_hands_up",
+        "17": "clamp",
+        "18": "high_five_opt",
+        "19": "hug_opt",
+        "22": "refuse",
+        "23": "right_hand_up",
+        "24": "ultraman_ray",
+        "25": "wave_under_head",
+        "26": "wave_above_head",
+        "27": "shake_hand_opt",
+        "31": "extend_right_arm_forward",
+        "32": "right_hand_on_mouth",
+        "33": "right_hand_on_heart",
+        "34": "both_hands_up_deviate_right",
+        "35": "emphasize",
+        "99": "release_arm"
+      },
+      "movement_patterns": {
+        "greeting": [
+          32,
+          99
+        ],
+        "farewell": [
+          32,
+          99
+        ],
+        "thinking": [
+          32,
+          99
+        ],
+        "agreement": [
+          32,
+          99
+        ],
+        "celebration": [
+          15,
+          17,
+          99
+        ],
+        "sadness": [
+          33,
+          99
+        ]
+      },
+      "locomotion": {
+        "enable_walking": true,
+        "enable_turning": true,
+        "enable_sitting": true,
+        "enable_standing": true,
+        "enable_squatting": true
+      }
     },
     "G1Arms": {
       "enabled": true,
-      "max_force": 30.0,
-      "max_speed": 1.0,
-      "enable_force_control": true,
-      "enable_collision_detection": true,
-      "enable_gestures": true,
-      "gesture_library": [
-        "wave", "point", "thumbs_up", "greeting", "explanation"
-      ],
-      "mock_mode": false
+      "arm_speed": 0.5,
+      "precision_mode": true,
+      "safety_limits": {
+        "max_force": 10.0,
+        "max_speed": 0.3,
+        "collision_detection": true,
+        "joint_limits": true
+      },
+      "mock_mode": false,
+      "gesture_library": {
+        "wave": {
+          "movement_id": 32,
+          "duration": 3.0
+        },
+        "point": {
+          "movement_id": 32,
+          "duration": 2.0
+        },
+        "thumbs_up": {
+          "movement_id": 32,
+          "duration": 2.0
+        },
+        "peace": {
+          "movement_id": 32,
+          "duration": 2.0
+        },
+        "clap": {
+          "movement_id": 17,
+          "duration": 3.0
+        },
+        "hug": {
+          "movement_id": 19,
+          "duration": 4.0
+        }
+      },
+      "arm_control": {
+        "left_arm": true,
+        "right_arm": true,
+        "both_arms": true,
+        "independent_control": true
+      }
     },
     "G1Audio": {
       "enabled": true,
-      "sample_rate": 44100,
-      "channels": 2,
-      "default_volume": 0.7,
-      "enable_effects": true,
-      "mock_mode": false
-    }
-  },
-  
-  // Sistema de Fusão Otimizado
-  "fuser": {
-    "type": "multimodal",
-    "config": {
-      "fusion_strategy": "weighted",
-      "input_weights": {
-        "G1Voice": 0.4,
-        "G1Vision": 0.3,
-        "G1State": 0.2,
-        "G1Sensors": 0.1
+      "volume": 100,
+      "audio_format": "wav",
+      "sample_rate": 16000,
+      "channels": 1,
+      "bit_depth": 16,
+      "mock_mode": false,
+      "playback_controls": {
+        "play": true,
+        "pause": true,
+        "stop": true,
+        "volume_control": true,
+        "seek": true
       },
-      "confidence_threshold": 0.4,
-      "temporal_window": 1.5
-    }
-  },
-  
-  // LLM para Produção
-  "llm": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "api_key": "${OPENAI_API_KEY}",
-    "max_tokens": 150,
-    "temperature": 0.6,
-    "context_integration": true,
-    "conversation_memory": 5,
-    "fallback": "mock",
-    "rate_limit": {
-      "requests_per_minute": 60,
-      "tokens_per_minute": 8000
-    }
-  },
-  
-  // G1 Controller - PRODUÇÃO
-  "g1_controller": {
-    "enabled": true,
-    "mock_mode": false,
-    "interface": {
-      "robot_ip": "192.168.1.120",
-      "robot_port": 8080,
-      "timeout": 3.0,
-      "retry_attempts": 3,
-      "safety_mode": true,
-      "emergency_stop_enabled": true
-    },
-    "movement_limits": {
-      "max_speed": 1.2,
-      "max_acceleration": 0.8,
-      "workspace_bounds": {
-        "x": [-3.0, 3.0],
-        "y": [-3.0, 3.0],
-        "z": [0.0, 2.5]
+      "stream_management": {
+        "default_stream": "t031a5",
+        "chunk_size": 96000,
+        "sleep_time": 0.1,
+        "buffer_size": 10
+      },
+      "audio_processing": {
+        "noise_reduction": true,
+        "echo_cancellation": true,
+        "automatic_gain_control": true
       }
     }
   },
-  
-  // WebSim para Monitoramento
-  "websim": {
-    "enabled": true,
-    "host": "0.0.0.0",
-    "port": 8080,
-    "debug": false,
-    "auto_reload": false,
-    "static_dir": "static",
-    "templates_dir": "templates",
-    "max_connections": 5
+  "unitree_g1": {
+    "interface": {
+      "robot_ip": "192.168.123.161",
+      "robot_port": 8080,
+      "interface": "en11",
+      "timeout": 10.0,
+      "safety_mode": "normal",
+      "emergency_stop": true,
+      "max_speed": 0.5,
+      "max_turn_speed": 0.3,
+      "retry_attempts": 3,
+      "connection_timeout": 5.0
+    },
+    "controller": {
+      "default_speed": 0.3,
+      "default_volume": 100,
+      "default_speaker_id": 1,
+      "audio_timeout": 5.0,
+      "max_history": 100,
+      "gesture_speed": 0.5,
+      "movement_timeout": 10.0
+    },
+    "audio": {
+      "tts": {
+        "speaker_id_english": 1,
+        "speaker_id_chinese": 0,
+        "volume_max": 100,
+        "supported_languages": [
+          "en-US",
+          "zh-CN"
+        ],
+        "voice_quality": "high",
+        "speed_control": true
+      },
+      "wav": {
+        "format": "16kHz_mono_16bit",
+        "stream_name": "t031a5",
+        "chunk_size": 96000,
+        "sleep_time": 0.1,
+        "supported_formats": [
+          "wav",
+          "mp3",
+          "ogg"
+        ]
+      }
+    },
+    "movements": {
+      "confirmed": {
+        "1": {
+          "name": "turn_back_wave",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "11": {
+          "name": "blow_kiss_with_both_hands",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "12": {
+          "name": "blow_kiss_with_left_hand",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "13": {
+          "name": "blow_kiss_with_right_hand",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "15": {
+          "name": "both_hands_up",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "17": {
+          "name": "clamp",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "18": {
+          "name": "high_five_opt",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "19": {
+          "name": "hug_opt",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "22": {
+          "name": "refuse",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "23": {
+          "name": "right_hand_up",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "24": {
+          "name": "ultraman_ray",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "25": {
+          "name": "wave_under_head",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "26": {
+          "name": "wave_above_head",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "27": {
+          "name": "shake_hand_opt",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "31": {
+          "name": "extend_right_arm_forward",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "32": {
+          "name": "right_hand_on_mouth",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "33": {
+          "name": "right_hand_on_heart",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "34": {
+          "name": "both_hands_up_deviate_right",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "35": {
+          "name": "emphasize",
+          "duration": 3.0,
+          "requires_relax": true
+        },
+        "99": {
+          "name": "release_arm",
+          "duration": 1.0,
+          "is_relax": true
+        }
+      },
+      "fsm_states": {
+        "0": {
+          "name": "Zero Torque",
+          "type": "fsm"
+        },
+        "1": {
+          "name": "Damping",
+          "type": "fsm"
+        },
+        "2": {
+          "name": "Get Ready",
+          "type": "fsm"
+        },
+        "3": {
+          "name": "Squat",
+          "type": "fsm"
+        },
+        "4": {
+          "name": "Seat",
+          "type": "fsm"
+        },
+        "5": {
+          "name": "Start",
+          "type": "fsm"
+        },
+        "6": {
+          "name": "Lie2StandUp",
+          "type": "fsm"
+        },
+        "7": {
+          "name": "Squat2StandUp",
+          "type": "fsm"
+        },
+        "200": {
+          "name": "Main Operation Control",
+          "type": "fsm"
+        },
+        "702": {
+          "name": "AI Mode",
+          "type": "fsm"
+        },
+        "706": {
+          "name": "AI Mode",
+          "type": "fsm"
+        }
+      },
+      "locomotion": {
+        "damp": {
+          "name": "Damping Mode",
+          "type": "locomotion"
+        },
+        "sit": {
+          "name": "Sit Down",
+          "type": "locomotion"
+        },
+        "highstand": {
+          "name": "High Stand",
+          "type": "locomotion"
+        },
+        "lowstand": {
+          "name": "Low Stand",
+          "type": "locomotion"
+        }
+      }
+    },
+    "leds": {
+      "default_color": [
+        173,
+        216,
+        230
+      ],
+      "emotion_colors": {
+        "happy": [
+          0,
+          255,
+          0
+        ],
+        "sad": [
+          0,
+          0,
+          255
+        ],
+        "excited": [
+          255,
+          255,
+          0
+        ],
+        "calm": [
+          173,
+          216,
+          230
+        ],
+        "neutral": [
+          255,
+          255,
+          255
+        ],
+        "error": [
+          255,
+          0,
+          0
+        ],
+        "chinese": [
+          255,
+          0,
+          0
+        ],
+        "english": [
+          0,
+          255,
+          0
+        ],
+        "surprised": [
+          255,
+          165,
+          0
+        ],
+        "angry": [
+          255,
+          0,
+          255
+        ]
+      },
+      "animation_speed": 0.5,
+      "brightness_control": true
+    }
   },
-  
-  // Logging Otimizado
+  "llm_providers": {
+    "primary": {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "api_key_env": "OPENAI_API_KEY",
+      "max_tokens": 1000,
+      "temperature": 0.7,
+      "timeout": 30.0,
+      "retry_attempts": 3
+    },
+    "fallback": {
+      "provider": "mock",
+      "model": "mock-llm",
+      "max_tokens": 500,
+      "temperature": 0.5,
+      "timeout": 5.0
+    },
+    "vision": {
+      "provider": "openai",
+      "model": "gpt-4o",
+      "api_key_env": "OPENAI_API_KEY",
+      "max_tokens": 500,
+      "temperature": 0.3
+    }
+  },
   "logging": {
     "level": "INFO",
-    "file": "logs/g1_production.log",
-    "log_format": "production",
-    "enable_metrics": true,
-    "enable_performance_monitoring": true
+    "structured": true,
+    "file_logging": true,
+    "log_file": "logs/t031a5_complete.log",
+    "max_file_size": "10MB",
+    "backup_count": 5,
+    "console_logging": true,
+    "performance_logging": true,
+    "error_tracking": true
   },
-  
-  // Métricas de Produção
   "metrics": {
     "enabled": true,
-    "collection_interval": 2.0,
-    "export_format": "json",
-    "export_file": "logs/g1_production_metrics.json",
-    "performance_alerts": {
-      "response_time_threshold": 2.0,
-      "error_rate_threshold": 0.05
+    "collection_interval": 5.0,
+    "performance_monitoring": true,
+    "health_checks": true,
+    "system_metrics": true,
+    "robot_metrics": true,
+    "alerts": {
+      "battery_low": 20.0,
+      "temperature_high": 60.0,
+      "connection_lost": true,
+      "error_threshold": 5,
+      "performance_degradation": 0.8
+    },
+    "dashboards": {
+      "enabled": true,
+      "port": 8080,
+      "auto_refresh": true
     }
+  },
+  "security": {
+    "api_key_management": "env_file",
+    "env_file": ".env",
+    "credentials_directory": "credentials/",
+    "encryption_enabled": false,
+    "access_control": {
+      "enabled": true,
+      "allowed_ips": [
+        "127.0.0.1",
+        "192.168.123.0/24"
+      ],
+      "authentication_required": false
+    },
+    "data_protection": {
+      "privacy_mode": true,
+      "data_retention_days": 30,
+      "anonymize_logs": false
+    }
+  },
+  "websim": {
+    "enabled": false,
+    "host": "localhost",
+    "port": 8080,
+    "debug": false,
+    "cors_enabled": true,
+    "auto_start": true,
+    "mock_robot": true
+  },
+  "performance": {
+    "max_concurrent_requests": 10,
+    "request_timeout": 30.0,
+    "memory_limit": "1GB",
+    "cpu_limit": 0.8,
+    "optimization": {
+      "enable_caching": true,
+      "cache_size": 100,
+      "enable_compression": true,
+      "enable_async_processing": true
+    }
+  },
+  "network": {
+    "max_connections": 10,
+    "connection_timeout": 30.0,
+    "keep_alive": true,
+    "proxy": {
+      "enabled": false,
+      "host": "",
+      "port": 0
+    }
+  },
+  "backup": {
+    "enabled": true,
+    "auto_backup": true,
+    "backup_interval": "24h",
+    "backup_retention": 7,
+    "backup_location": "backups/",
+    "include_logs": true,
+    "include_configs": true
   }
 }

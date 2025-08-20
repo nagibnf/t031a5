@@ -1,0 +1,23 @@
+{
+  "name": "G1 Text-to-Speech Configuration",
+  "description": "Configuração de TTS para Tobias (G1) - ElevenLabs",
+  "version": "1.0",
+  "tts": {
+    "provider": "elevenlabs",
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "model_id": "eleven_multilingual_v2",
+    "language": "pt-BR",
+    "voice_settings": {
+      "stability": 0.5,
+      "similarity_boost": 0.5,
+      "style": 0.0,
+      "use_speaker_boost": true
+    },
+    "settings": {
+      "timeout": 30.0,
+      "retry_attempts": 3,
+      "save_audio": true,
+      "output_format": "wav"
+    }
+  }
+}

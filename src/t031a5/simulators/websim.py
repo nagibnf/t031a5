@@ -29,6 +29,9 @@ class WebSimConfig:
     templates_dir: str = "templates"
     max_connections: int = 10
     update_interval: float = 0.1
+    cors_enabled: bool = True
+    auto_start: bool = False
+    mock_robot: bool = True
 
 
 @dataclass
@@ -1289,11 +1292,12 @@ class WebSim:
             self.status_task = asyncio.create_task(self._status_loop())
             self.cleanup_task = asyncio.create_task(self._cleanup_loop())
             
-            logger.info(f"WebSim iniciado em http://{self.config.host}:{self.config.port}")
+            logger.info(f"✅ WebSim iniciado em http://{self.config.host}:{self.config.port}")
+            logger.info(f"🌐 Abra seu navegador e acesse: http://localhost:{self.config.port}")
             return True
             
         except Exception as e:
-            logger.error(f"Erro ao iniciar WebSim: {e}")
+            logger.error(f"❌ Erro ao iniciar WebSim: {e}")
             return False
     
     async def _status_loop(self):
@@ -1391,3 +1395,198 @@ class WebSim:
         except Exception as e:
             logger.error(f"Erro na verificação de saúde do WebSim: {e}")
             return False
+    
+    # ===============================================
+    # MÉTODOS HANDLERS HTTP
+    # ===============================================
+    
+    async def _handle_index(self, request):
+        """Handler para página principal."""
+        try:
+            template_path = Path(self.config.templates_dir) / "index.html"
+            with open(template_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return web.Response(text=content, content_type='text/html')
+        except Exception as e:
+            logger.error(f"Erro ao servir página principal: {e}")
+            return web.Response(text=f"Erro: {e}", status=500)
+    
+    async def _handle_api_status(self, request):
+        """Handler para API de status."""
+        try:
+            status = {
+                "connected": self.robot_status.connected,
+                "state": self.robot_status.state,
+                "battery_level": self.robot_status.battery_level,
+                "position": getattr(self.robot_status, 'position', 'unknown'),
+                "connections": len(self.websocket_connections),
+                "timestamp": time.time()
+            }
+            return web.json_response(status)
+        except Exception as e:
+            logger.error(f"Erro na API de status: {e}")
+            return web.json_response({"error": str(e)}, status=500)
+    
+    async def _handle_api_command(self, request):
+        """Handler para API de comandos."""
+        try:
+            data = await request.json()
+            command = data.get('command')
+            
+            if not command:
+                return web.json_response({"error": "Comando não especificado"}, status=400)
+            
+            # Simula execução do comando
+            result = {
+                "command": command,
+                "status": "executed",
+                "timestamp": time.time()
+            }
+            
+            # Adiciona ao histórico
+            self.robot_status.command_history.append(result)
+            
+            # Broadcast para WebSockets
+            await self._broadcast_command(result)
+            
+            return web.json_response(result)
+            
+        except Exception as e:
+            logger.error(f"Erro na API de comando: {e}")
+            return web.json_response({"error": str(e)}, status=500)
+    
+    async def _handle_api_history(self, request):
+        """Handler para API de histórico."""
+        try:
+            history = self.robot_status.command_history[-50:]  # Últimos 50 comandos
+            return web.json_response({"history": history})
+        except Exception as e:
+            logger.error(f"Erro na API de histórico: {e}")
+            return web.json_response({"error": str(e)}, status=500)
+    
+    async def _handle_api_emergency(self, request):
+        """Handler para API de emergência."""
+        try:
+            # Para todos os movimentos
+            emergency_result = {
+                "command": "emergency_stop",
+                "status": "executed",
+                "timestamp": time.time()
+            }
+            
+            # Broadcast emergência
+            await self._broadcast_command(emergency_result)
+            
+            return web.json_response(emergency_result)
+            
+        except Exception as e:
+            logger.error(f"Erro na API de emergência: {e}")
+            return web.json_response({"error": str(e)}, status=500)
+    
+    async def _handle_websocket(self, request):
+        """Handler para WebSocket."""
+        ws = web.WebSocketResponse()
+        await ws.prepare(request)
+        
+        # Adiciona à lista de conexões
+        self.websocket_connections.append(ws)
+        logger.info(f"Nova conexão WebSocket: {len(self.websocket_connections)} ativas")
+        
+        try:
+            # Envia status inicial
+            await ws.send_str(json.dumps({
+                "type": "status",
+                "data": {
+                    "connected": self.robot_status.connected,
+                    "state": self.robot_status.state,
+                    "battery_level": self.robot_status.battery_level
+                }
+            }))
+            
+            # Loop de mensagens
+            async for msg in ws:
+                if msg.type == WSMsgType.TEXT:
+                    try:
+                        data = json.loads(msg.data)
+                        await self._handle_websocket_message(ws, data)
+                    except json.JSONDecodeError:
+                        await ws.send_str(json.dumps({"error": "JSON inválido"}))
+                elif msg.type == WSMsgType.ERROR:
+                    logger.error(f"Erro no WebSocket: {ws.exception()}")
+                    break
+                    
+        except Exception as e:
+            logger.error(f"Erro no WebSocket: {e}")
+        finally:
+            # Remove da lista
+            if ws in self.websocket_connections:
+                self.websocket_connections.remove(ws)
+            logger.info(f"Conexão WebSocket fechada: {len(self.websocket_connections)} ativas")
+        
+        return ws
+    
+    async def _handle_websocket_message(self, ws, data):
+        """Processa mensagem WebSocket."""
+        try:
+            msg_type = data.get('type')
+            
+            if msg_type == 'command':
+                command = data.get('command')
+                # Executa comando
+                result = {
+                    "type": "command_result",
+                    "command": command,
+                    "status": "executed",
+                    "timestamp": time.time()
+                }
+                await ws.send_str(json.dumps(result))
+                
+            elif msg_type == 'ping':
+                await ws.send_str(json.dumps({"type": "pong"}))
+                
+        except Exception as e:
+            logger.error(f"Erro ao processar mensagem WebSocket: {e}")
+    
+    async def _broadcast_status(self):
+        """Broadcast status para todos os WebSockets."""
+        if not self.websocket_connections:
+            return
+        
+        status_msg = json.dumps({
+            "type": "status_update",
+            "data": {
+                "connected": self.robot_status.connected,
+                "state": self.robot_status.state,
+                "battery_level": self.robot_status.battery_level,
+                "timestamp": time.time()
+            }
+        })
+        
+        # Remove conexões fechadas e envia para ativas
+        active_connections = []
+        for ws in self.websocket_connections:
+            if not ws.closed:
+                try:
+                    await ws.send_str(status_msg)
+                    active_connections.append(ws)
+                except Exception:
+                    pass  # Conexão morta
+        
+        self.websocket_connections = active_connections
+    
+    async def _broadcast_command(self, command_result):
+        """Broadcast comando para todos os WebSockets."""
+        if not self.websocket_connections:
+            return
+        
+        command_msg = json.dumps({
+            "type": "command_executed",
+            "data": command_result
+        })
+        
+        for ws in self.websocket_connections:
+            if not ws.closed:
+                try:
+                    await ws.send_str(command_msg)
+                except Exception:
+                    pass

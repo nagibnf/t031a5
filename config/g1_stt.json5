@@ -1,0 +1,25 @@
+{
+  "name": "G1 Speech-to-Text Configuration",
+  "description": "Configuração de STT para Tobias (G1) - Google Speech API + OpenAI Whisper",
+  "version": "1.0",
+  "stt": {
+    "primary": {
+      "provider": "google",
+      "language": "pt-BR",
+      "encoding": "LINEAR16",
+      "sample_rate": 16000,
+      "enable_punctuation": true,
+      "model": "latest_long"
+    },
+    "fallback": {
+      "provider": "openai",
+      "model": "whisper-1",
+      "language": "pt"
+    },
+    "settings": {
+      "timeout": 30.0,
+      "retry_attempts": 3,
+      "confidence_threshold": 0.7
+    }
+  }
+}

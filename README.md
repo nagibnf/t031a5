@@ -28,10 +28,13 @@ pip list | grep unitree
 
 ```bash
 # Teste das funcionalidades confirmadas
-python tests/test_g1_confirmed_features.py
+python scripts/test/test_g1_confirmed_features.py
 
 # Demonstração completa
-python test_t031a5_integrated.py
+python scripts/test/test_t031a5_integrated.py
+
+# Exemplo básico
+python examples/basic_usage.py
 ```
 
 ### 3. Configuração do G1
@@ -75,7 +78,7 @@ Certifique-se de que o G1 está:
 **Não Disponíveis (Erro 7402):**
 - **IDs 10, 14, 16, 20-21, 28-30, 36-50**: Movimentos não implementados
 
-**📋 Lista Completa**: Veja `docs/g1_movements_complete_list.md` para todos os 28 movimentos confirmados
+**📋 Lista Completa**: Veja `docs/g1_movements_complete_list.md` para todos os movimentos confirmados
 
 ### 🎵 Áudio
 
@@ -125,20 +128,33 @@ Para captura de áudio, use:
 
 ```
 t031a5/
-├── src/t031a5/
-│   ├── unitree/
-│   │   ├── g1_interface.py      # Interface principal
-│   │   └── g1_controller.py     # Controlador avançado
-│   ├── inputs/                  # Entradas multimodais
-│   ├── actions/                 # Ações do robô
-│   └── runtime/                 # Sistema de execução
-├── config/
-│   └── g1_real.json5           # Configuração para G1 real
-├── tests/
-│   ├── test_g1_confirmed_features.py  # Teste funcionalidades
-│   └── test_g1_integrated.py          # Teste integrado
-├── test_t031a5_integrated.py   # Demonstração completa
-└── README.md                   # Este arquivo
+├── src/t031a5/                 # Código fonte principal
+│   ├── unitree/               # Interface G1
+│   ├── inputs/                # Entradas multimodais
+│   ├── actions/               # Ações do robô
+│   ├── runtime/               # Sistema de execução
+│   ├── conversation/          # Engine de conversação
+│   ├── llm/                   # Provedores de LLM
+│   └── logging/               # Sistema de logs
+├── config/                    # Configurações
+│   ├── g1_base_complete.json5 # Configuração base
+│   ├── g1_test.json5          # Para testes
+│   ├── g1_mock.json5          # Modo mock
+│   ├── g1_production.json5    # Produção
+│   └── g1_real.json5          # G1 real
+├── scripts/                   # Scripts utilitários
+│   ├── test/                  # Scripts de teste
+│   ├── monitor/               # Monitoramento
+│   ├── deploy/                # Deploy
+│   └── create_config.py       # Criador de configs
+├── docs/                      # Documentação
+│   ├── project/               # Status e planejamento
+│   ├── guides/                # Guias práticos
+│   └── api/                   # Documentação técnica
+├── examples/                  # Exemplos de uso
+├── logs/                      # Logs do sistema
+├── credentials/               # Credenciais
+└── README.md                  # Este arquivo
 ```
 
 ## 🧪 Testes

@@ -1,5 +1,5 @@
 // ========================================
-// CONFIGURAÇÃO: G1 Mock
+// CONFIGURAÇÃO: G1 Test
 // ========================================
 // 
 // Baseada em: config/g1_base_complete.json5
@@ -8,14 +8,14 @@
 // ========================================
 
 {
-  "name": "G1 Mock",
+  "name": "G1 Test",
   "version": "1.0.0",
-  "description": "Configuração para testes sem hardware real",
+  "description": "Configuração para testes integrados",
   "hertz": 5,
   "system_prompt_base": "Você é um assistente robótico G1 avançado, capaz de controlar hardware físico, processar visão, áudio e movimento. Seja cuidadoso, seguro e útil.",
   "development": {
     "websim_enabled": true,
-    "debug_mode": false,
+    "debug_mode": true,
     "hot_reload": false,
     "log_level": "INFO",
     "performance_monitoring": true
@@ -69,7 +69,7 @@
       "noise_suppression": true,
       "continuous_listening": true,
       "wake_word": "G1",
-      "mock_mode": true,
+      "mock_mode": false,
       "microphone_index": 0,
       "sample_rate": 16000,
       "chunk_size": 1024,
@@ -94,7 +94,7 @@
       "enable_ocr": true,
       "enable_scene_analysis": true,
       "enable_gesture_recognition": true,
-      "mock_mode": true,
+      "mock_mode": false,
       "face_recognition_distance": 0.6,
       "object_classes": [
         "person",
@@ -120,7 +120,7 @@
       "enable_safety_monitoring": true,
       "enable_pose_tracking": true,
       "enable_force_sensing": true,
-      "mock_mode": true,
+      "mock_mode": false,
       "alert_thresholds": {
         "battery_low": 20.0,
         "temperature_high": 60.0,
@@ -135,7 +135,7 @@
       "enable_force_sensors": true,
       "enable_torque_sensors": true,
       "enable_proximity_sensors": true,
-      "mock_mode": true,
+      "mock_mode": false,
       "calibration_enabled": true
     },
     "G1GPS": {
@@ -144,7 +144,7 @@
       "enable_navigation": true,
       "enable_waypoint_tracking": true,
       "enable_route_planning": true,
-      "mock_mode": true,
+      "mock_mode": false,
       "gps_timeout": 5.0,
       "accuracy_threshold": 2.0
     }
@@ -159,7 +159,7 @@
       "volume": 100,
       "emotion_modulation": true,
       "voice_synthesis": true,
-      "mock_mode": true,
+      "mock_mode": false,
       "engine": "unitree_tts",
       "speaker_id": 1,
       "supported_languages": [
@@ -247,7 +247,7 @@
       },
       "brightness": 1.0,
       "transition_speed": 0.5,
-      "mock_mode": true,
+      "mock_mode": false,
       "auto_emotion": true,
       "emotion_duration": 3.0,
       "blink_enabled": true
@@ -262,7 +262,7 @@
         "emergency_stop": true,
         "collision_detection": true
       },
-      "mock_mode": true,
+      "mock_mode": false,
       "confirmed_movements": {
         "1": "turn_back_wave",
         "11": "blow_kiss_with_both_hands",
@@ -330,7 +330,7 @@
         "collision_detection": true,
         "joint_limits": true
       },
-      "mock_mode": true,
+      "mock_mode": false,
       "gesture_library": {
         "wave": {
           "movement_id": 32,
@@ -371,7 +371,7 @@
       "sample_rate": 16000,
       "channels": 1,
       "bit_depth": 16,
-      "mock_mode": true,
+      "mock_mode": false,
       "playback_controls": {
         "play": true,
         "pause": true,
@@ -397,7 +397,7 @@
       "robot_ip": "192.168.123.161",
       "robot_port": 8080,
       "interface": "en11",
-      "timeout": 10.0,
+      "timeout": 5.0,
       "safety_mode": "normal",
       "emergency_stop": true,
       "max_speed": 0.5,
@@ -409,7 +409,7 @@
       "default_speed": 0.3,
       "default_volume": 100,
       "default_speaker_id": 1,
-      "audio_timeout": 5.0,
+      "audio_timeout": 3.0,
       "max_history": 100,
       "gesture_speed": 0.5,
       "movement_timeout": 10.0
@@ -694,7 +694,7 @@
     }
   },
   "logging": {
-    "level": "INFO",
+    "level": "DEBUG",
     "structured": true,
     "file_logging": true,
     "log_file": "logs/t031a5_complete.log",

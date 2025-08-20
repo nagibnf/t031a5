@@ -1,80 +1,58 @@
-# 📚 **DOCUMENTAÇÃO t031a5**
+# 📚 Documentação - Sistema t031a5
 
-## 🎯 **DOCUMENTOS PRINCIPAIS**
+Esta pasta contém toda a documentação do sistema t031a5, organizada por categoria.
 
-### **🚀 [PRODUCTION_GUIDE.md](../PRODUCTION_GUIDE.md)**
-- Guia completo para deploy em produção
-- Configuração do G1 real
-- Troubleshooting e monitoramento
+## 📂 Estrutura
 
-### **📋 [config/README.md](../config/README.md)**
-- Explicação de todas as configurações
-- Perfis disponíveis (produção, mock, conversação)
-- Personalização de parâmetros
+### 📋 `project/` - Documentação do Projeto
+Documentação relacionada ao projeto, status e planejamento.
 
-### **🧪 [tests/README.md](../tests/README.md)**
-- Suite completa de testes
-- Como executar testes específicos
-- Validação do sistema
+- **`PROJECT_STATUS_FINAL.md`** - Status final do projeto
+- **`TOMORROW_CHECKLIST.md`** - Checklist para próximos passos
+- **`PROJECT_CLEANUP_SUMMARY.md`** - Resumo da limpeza do projeto
+- **`g1_integration_guide.md`** - Guia de integração G1 (arquivado)
+- **`INPUTS_ORGANIZATION.md`** - Organização de inputs (arquivado)
+- **`installation.md`** - Instalação (arquivado)
+- **`PROJECT_SUMMARY.md`** - Resumo do projeto (arquivado)
 
----
+### 📖 `guides/` - Guias e Tutoriais
+Guias práticos e tutoriais para uso do sistema.
 
-## 🔄 **WORKFLOWS COMUNS**
+- **`g1_locomotion_rotation_guide.md`** - Guia de locomoção e rotação
+- **`g1_movements_complete_list.md`** - Lista completa de movimentos
+- **`g1_state_machine_guide.md`** - Guia da máquina de estados
+- **`lessons_learned_g1_dance_tests.md`** - Lições aprendidas dos testes de dança
+- **`PRODUCTION_GUIDE.md`** - Guia de produção
+- **`TESTE_ROBO_G1.md`** - Guia de teste do robô G1
 
-### **🌅 Setup Inicial:**
-1. `./deploy_g1.sh` - Deploy completo
-2. `./quick_start.sh` - Início rápido
-3. Acessar WebSim: http://localhost:8080
+### 🔌 `api/` - Documentação da API
+Documentação técnica da API e interfaces.
 
-### **🎮 Uso Diário:**
-1. `./start_g1.sh` - Iniciar sistema
-2. Escolher modo (produção/mock/websim)
-3. Monitorar via WebSim
+- **`README.md`** - Documentação da API de testes
 
-### **🔧 Manutenção:**
-1. `python -m t031a5.cli status` - Status
-2. `tail -f logs/g1_production.log` - Logs
-3. `python -m t031a5.cli validate` - Validar
+## 🎯 Como Usar
 
----
+### Para Desenvolvedores
+1. **`project/`** - Entenda o status e planejamento
+2. **`guides/`** - Aprenda como usar funcionalidades específicas
+3. **`api/`** - Consulte a documentação técnica
 
-## 📁 **ESTRUTURA DE ARQUIVOS**
+### Para Usuários
+1. **`guides/`** - Siga os guias práticos
+2. **`project/`** - Verifique o status atual
 
-```
-docs/
-├── README.md              # Este arquivo
-├── archive/               # Docs antigos
-│   ├── installation.md
-│   ├── g1_integration_guide.md
-│   └── PROJECT_SUMMARY.md
-```
+### Para Contribuidores
+1. **`project/`** - Entenda o contexto do projeto
+2. **`guides/`** - Aprenda as funcionalidades
+3. **`api/`** - Entenda a arquitetura técnica
 
----
+## 📋 Atualizações
 
-## 🔗 **LINKS ÚTEIS**
-
-- **Unitree G1 SDK**: https://github.com/unitreerobotics/unitree_sdk2
-- **OpenAI API**: https://platform.openai.com/docs
-- **Anthropic API**: https://docs.anthropic.com/
+- **Documentação ativa**: Mantida atualizada
+- **Documentação arquivada**: Movida para `project/` com prefixo
+- **Guias práticos**: Organizados em `guides/`
+- **API docs**: Técnica em `api/`
 
 ---
 
-## 🆘 **SUPORTE**
-
-### **Problemas Comuns:**
-1. **G1 não conecta** → Verificar IP em config/
-2. **LLM não responde** → Verificar API keys
-3. **Performance baixa** → Ajustar "hertz" em config
-4. **WebSim erro** → Verificar logs/
-
-### **Debug:**
-```bash
-# Logs detalhados
-python -m t031a5.cli run --config config/g1_production.json5 --debug
-
-# Status completo
-python -m t031a5.cli status
-
-# Validar config
-python -m t031a5.cli validate --config config/g1_production.json5
-```
+**📚 Documentação organizada e fácil de navegar!**
