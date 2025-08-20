@@ -8,13 +8,17 @@ Este documento descreve como manter os ambientes **Mac (desenvolvimento)** e **J
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Mac (Dev)     │────▶│   Git Repo      │────▶│ Jetson (Prod)   │
+│   Mac (Dev)     │────▶│   GitHub        │────▶│ Jetson (Prod)   │
 │                 │     │  (Fonte da      │     │                 │
 │ - Desenvolvimento│     │   Verdade)      │     │ - Robô Tobias   │
-│ - Testes        │◀────│                 │◀────│ - Produção      │
+│ - Testes        │◀────│ nagibnf/t031a5  │◀────│ - Produção      │
 │ - Debugging     │     │                 │     │ - Deploy        │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
+
+### 🎯 Sincronização Tripla Completa
+
+O sistema agora suporta sincronização automática entre **Mac ↔ GitHub ↔ Jetson**, mantendo os três ambientes sempre alinhados com a versão funcional.
 
 ## 🛠️ Ferramentas de Sincronização
 
@@ -71,6 +75,39 @@ Este documento descreve como manter os ambientes **Mac (desenvolvimento)** e **J
 **Desvantagens:**
 - ⚠️ Mais lento
 - ⚠️ Requer commits
+
+### 3. **🆕 Sincronização Tripla GitHub (`github_sync_complete.sh`)**
+
+**Uso para sincronização completa com GitHub:**
+
+```bash
+# Sincronização completa: Mac → GitHub → Jetson
+./scripts/github_sync_complete.sh push
+
+# Pull de mudanças: GitHub → Mac + Jetson
+./scripts/github_sync_complete.sh pull
+
+# Status dos três ambientes
+./scripts/github_sync_complete.sh status
+
+# Teste completo pós-sincronização
+./scripts/github_sync_complete.sh test
+
+# Sincronização completa + validação
+./scripts/github_sync_complete.sh full
+```
+
+**Vantagens:**
+- ✅ Sincronização tripla automática
+- ✅ Backup em nuvem (GitHub)
+- ✅ Commits automáticos com changelog
+- ✅ Validação automática pós-sync
+- ✅ Resolução de conflitos
+
+**Ideal para:**
+- 🎯 Releases de produção
+- 📦 Backup de versões funcionais
+- 👥 Colaboração em equipe
 
 ## 📋 Fluxos de Trabalho Recomendados
 
