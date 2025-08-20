@@ -1,0 +1,127 @@
+{
+  // Configuração para Sistema t031a5 em Modo Mock
+  // Todas as funcionalidades simuladas para testes
+  
+  // Configurações básicas do sistema
+  "name": "G1 Mock Assistant",
+  "hertz": 5,
+  "system_prompt_base": "Você é um assistente robótico G1 em modo de teste. Todas as funcionalidades estão simuladas.",
+  "development": {
+    "websim_enabled": false,
+    "debug_mode": true,
+    "hot_reload": false
+  },
+  
+  // Características específicas do G1
+  "g1_specific": {
+    "robot_type": "unitree_g1",
+    "capabilities": [
+      "bipedal_locomotion",
+      "arm_manipulation", 
+      "computer_vision",
+      "audio_processing",
+      "conversational_ai"
+    ],
+    "safety_mode": true
+  },
+  
+  // Sistema de Conversação Integrado
+  "conversation_engine": {
+    "enabled": true,
+    "enable_vision_context": true,
+    "enable_gesture_sync": true,
+    "enable_emotion_detection": true,
+    "conversation_timeout": 30.0,
+    "response_delay": 0.5
+  },
+  
+  // Inputs Multimodais (MOCK)
+  "agent_inputs": {
+    "G1Voice": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1Vision": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1State": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1Sensors": {
+      "enabled": true,
+      "mock_mode": true
+    }
+  },
+  
+  // Actions Expressivas (MOCK)
+  "agent_actions": {
+    "G1Speech": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1Emotion": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1Movement": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1Arms": {
+      "enabled": true,
+      "mock_mode": true
+    },
+    "G1Audio": {
+      "enabled": true,
+      "mock_mode": true
+    }
+  },
+  
+  // Sistema de Fusão Multimodal  
+  "fuser": {
+    "type": "multimodal",
+    "config": {
+      "fusion_strategy": "weighted",
+      "input_weights": {
+        "G1Voice": 0.4,
+        "G1Vision": 0.3,
+        "G1State": 0.2,
+        "G1Sensors": 0.1
+      },
+      "confidence_threshold": 0.3,
+      "temporal_window": 2.0,
+      "enable_attention": true
+    }
+  },
+  
+  // LLM Mock (sem API)
+  "llm": {
+    "provider": "mock",
+    "model": "mock-g1",
+    "temperature": 0.7,
+    "max_tokens": 150,
+    "fallback": "mock"
+  },
+  
+  // G1Controller DESABILITADO (para evitar spam)
+  "g1_controller": {
+    "enabled": false,
+    "mock_mode": true
+  },
+  
+  // Sistema de Logging Estruturado
+  "logging": {
+    "level": "INFO",
+    "file": "logs/g1_mock.log",
+    "log_format": "simple",
+    "enable_metrics": false,
+    "enable_performance_monitoring": false
+  },
+  
+  // Métricas e Monitoramento
+  "metrics": {
+    "enabled": false
+  }
+}

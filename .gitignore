@@ -1,0 +1,107 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/*.log
+logs/*.json
+*.log
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# API Keys & Secrets
+.env
+.env.*
+keys/
+secrets/
+credentials/
+
+# Test files
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Audio/Video files
+*.wav
+*.mp3
+*.mp4
+*.avi
+
+# Large model files
+*.h5
+*.pkl
+*.bin
+*.safetensors
+
+# Development
+.venv/
+*.pyc
+debug/
+scratch/
+
+# Production
+deployment/
+backups/
+
+# t031a5 Specific
+.mypy_cache/
+.cursor/
+unitree_sdk2_python/
+unitree/
+
+# Test results
+g1_discovery_results.json
+g1_actions_list.md
+G1_MOVEMENTS_FINAL_SUMMARY.md
+RELATORIO_COMPLETO_G1.md
+
+# Audio files (keep structure but ignore content)
+audio/effects/*.wav
+audio/effects/*.mp3
+audio/speech/*.wav
+audio/speech/*.mp3

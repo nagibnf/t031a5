@@ -1,0 +1,256 @@
+{
+  // Configuração para Sistema de Conversação Multimodal G1
+  // Integra visão, escuta, fala e gestos sincronizados
+  
+  // Configurações básicas do sistema
+  "name": "G1 Conversational Assistant",
+  "hertz": 5, // Frequência reduzida para conversação natural
+  "system_prompt_base": "Você é um assistente robótico G1 conversacional e expressivo, capaz de ver, ouvir, falar e gesticular de forma natural e empática.",
+  "development": {
+    "websim_enabled": true,
+    "debug_mode": false,
+    "hot_reload": false
+  },
+  
+  // Características específicas do G1
+  "g1_specific": {
+    "robot_type": "unitree_g1",
+    "capabilities": [
+      "bipedal_locomotion",
+      "arm_manipulation", 
+      "computer_vision",
+      "audio_processing",
+      "conversational_ai",
+      "emotional_expression",
+      "gesture_recognition"
+    ],
+    "safety_mode": true
+  },
+  
+  // Sistema de Conversação Integrado
+  "conversation_engine": {
+    "enabled": true,
+    "enable_vision_context": true,
+    "enable_gesture_sync": true,
+    "enable_emotion_detection": true,
+    "conversation_timeout": 30.0,
+    "response_delay": 0.5
+  },
+  
+  // Inputs Multimodais
+  "agent_inputs": {
+    "G1Voice": {
+      "enabled": true,
+      "language": "pt-BR",
+      "sensitivity": 0.8,
+      "noise_suppression": true,
+      "continuous_listening": true,
+      "wake_word": "G1",
+      "mock_mode": false, // Usar reconhecimento real
+      "microphone_index": 0,
+      "sample_rate": 16000,
+      "chunk_size": 1024
+    },
+    "G1Vision": {
+      "enabled": true,
+      "camera_index": 0,
+      "resolution": [1280, 720],
+      "fps": 30,
+      "detection_confidence": 0.7,
+      "enable_face_detection": true,
+      "enable_object_detection": true,
+      "enable_motion_detection": true,
+      "enable_ocr": true,
+      "mock_mode": false, // Usar visão real
+      "face_recognition_distance": 0.6,
+      "object_classes": ["person", "chair", "table", "book", "phone", "laptop"]
+    },
+    "G1State": {
+      "enabled": true,
+      "update_interval": 0.5,
+      "enable_joint_monitoring": true,
+      "enable_motor_monitoring": true,
+      "enable_battery_monitoring": true,
+      "enable_thermal_monitoring": true,
+      "enable_safety_monitoring": true,
+      "mock_mode": false // Usar estado real do robô
+    },
+    "G1GPS": {
+      "enabled": false, // Desabilitado para ambiente indoor
+      "mock_mode": true
+    },
+    "G1Sensors": {
+      "enabled": true,
+      "update_interval": 0.1,
+      "mock_mode": false // Usar sensores reais
+    }
+  },
+  
+  // Actions Expressivas
+  "agent_actions": {
+    "G1Speech": {
+      "enabled": true,
+      "language": "pt-BR",
+      "voice_type": "friendly",
+      "speaking_rate": 1.0,
+      "pitch": 0.0,
+      "volume": 0.8,
+      "emotion_modulation": true,
+      "mock_mode": false, // Usar síntese real
+      "engine": "espeak", // ou "festival", "gtts"
+      "voice_name": "pt-br"
+    },
+    "G1Emotion": {
+      "enabled": true,
+      "led_brightness": 0.8,
+      "transition_time": 0.5,
+      "emotion_mapping": {
+        "happy": [0, 255, 0],     // Verde
+        "sad": [0, 0, 255],       // Azul
+        "excited": [255, 165, 0], // Laranja
+        "confused": [255, 255, 0], // Amarelo
+        "focused": [255, 255, 255], // Branco
+        "neutral": [128, 128, 128] // Cinza
+      },
+      "mock_mode": false // Usar LEDs reais
+    },
+    "G1Movement": {
+      "enabled": true,
+      "max_speed": 1.0,        // Velocidade reduzida para conversação
+      "max_turn_speed": 0.5,   // Rotação suave
+      "safety_distance": 1.0,   // Distância de segurança aumentada
+      "enable_obstacle_detection": true,
+      "enable_posture_control": true,
+      "enable_navigation": false, // Foco em conversação, não navegação
+      "conversational_gestures": true,
+      "head_tracking": true,
+      "mock_mode": false // Usar movimento real
+    },
+    "G1Arms": {
+      "enabled": true,
+      "max_force": 30.0,       // Força reduzida para gestos suaves
+      "max_speed": 0.8,        // Velocidade suave para gestos naturais
+      "enable_force_control": true,
+      "enable_collision_detection": true,
+      "enable_gestures": true,
+      "gesture_library": [
+        "wave", "point", "thumbs_up", "open_palm", "thinking",
+        "greeting", "explanation", "emphasis", "calm", "excitement"
+      ],
+      "gesture_duration": 2.0,
+      "return_to_neutral": true,
+      "mock_mode": false // Usar braços reais
+    },
+    "G1Audio": {
+      "enabled": true,
+      "sample_rate": 44100,
+      "channels": 2,
+      "default_volume": 0.6,   // Volume moderado para ambiente
+      "enable_effects": true,
+      "enable_equalizer": true,
+      "emotional_audio_cues": true,
+      "sound_effects": {
+        "thinking": "soft_beep.wav",
+        "understanding": "chime.wav",
+        "greeting": "welcome.wav",
+        "farewell": "goodbye.wav"
+      },
+      "mock_mode": false // Usar áudio real
+    }
+  },
+  
+  // Sistema de Fusão Multimodal  
+  "fuser": {
+    "type": "multimodal",
+    "config": {
+      "fusion_strategy": "weighted",
+      "input_weights": {
+        "G1Voice": 0.4,      // Prioridade alta para voz
+        "G1Vision": 0.3,     // Contexto visual importante
+        "G1State": 0.2,      // Estado do robô
+        "G1Sensors": 0.1     // Sensores complementares
+      },
+      "confidence_threshold": 0.3,
+      "temporal_window": 2.0,
+      "enable_attention": true
+    }
+  },
+  
+  // LLM para Conversação Natural
+  "llm": {
+    "provider": "openai", // ou "anthropic" ou "mock"
+    "model": "gpt-4o-mini",
+    "api_key": "${OPENAI_API_KEY}",
+    "max_tokens": 150,    // Respostas conversacionais concisas
+    "temperature": 0.7,   // Criatividade moderada
+    "context_integration": true,
+    "conversation_memory": 10, // Lembrar últimas 10 interações
+    "fallback": "mock",
+    "rate_limit": {
+      "requests_per_minute": 30,
+      "tokens_per_minute": 4000
+    }
+  },
+  
+  // Integração com Hardware G1 Real
+  "g1_controller": {
+    "enabled": true,
+    "mock_mode": false, // USAR G1 REAL!
+    "interface": {
+      "robot_ip": "192.168.1.120", // IP do G1 na rede
+      "robot_port": 8080,
+      "timeout": 5.0,
+      "retry_attempts": 3,
+      "safety_mode": true,
+      "emergency_stop_enabled": true
+    },
+    "movement_limits": {
+      "max_speed": 1.0,
+      "max_acceleration": 0.5,
+      "workspace_bounds": {
+        "x": [-2.0, 2.0],
+        "y": [-2.0, 2.0],
+        "z": [0.0, 2.0]
+      }
+    }
+  },
+  
+  // Interface Web para Monitoramento
+  "websim": {
+    "enabled": true,
+    "host": "0.0.0.0",
+    "port": 8080,
+    "debug": false,
+    "auto_reload": false,
+    "static_dir": "static",
+    "templates_dir": "templates",
+    "max_connections": 10,
+    "update_interval": 0.1
+  },
+  
+  // Sistema de Logging Estruturado
+  "logging": {
+    "level": "INFO",
+    "file": "logs/g1_conversation.log",
+    "log_format": "detailed",
+    "enable_metrics": true,
+    "enable_performance_monitoring": true,
+    "conversation_logging": true,
+    "gesture_logging": true,
+    "emotion_logging": true
+  },
+  
+  // Métricas e Monitoramento
+  "metrics": {
+    "enabled": true,
+    "collection_interval": 1.0,
+    "export_format": "json",
+    "export_file": "logs/g1_conversation_metrics.json",
+    "conversation_metrics": true,
+    "performance_alerts": {
+      "response_time_threshold": 3.0,
+      "error_rate_threshold": 0.1,
+      "emotion_change_frequency": 5
+    }
+  }
+}

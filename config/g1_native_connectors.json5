@@ -1,0 +1,217 @@
+{
+  // Configuração para Conectores Nativos do G1
+  // Permite usar capacidades nativas do robô como plugins opcionais
+  
+  // Configurações básicas do sistema
+  "name": "G1 Native Connectors Test",
+  "hertz": 5,
+  "system_prompt_base": "Você é um assistente robótico G1 usando conectores nativos para otimização de performance.",
+  "development": {
+    "websim_enabled": true,
+    "debug_mode": true,
+    "hot_reload": false
+  },
+  
+  // Características específicas do G1
+  "g1_specific": {
+    "robot_type": "unitree_g1",
+    "capabilities": [
+      "bipedal_locomotion",
+      "arm_manipulation", 
+      "computer_vision",
+      "audio_processing",
+      "conversational_ai",
+      "emotional_expression",
+      "gesture_recognition"
+    ],
+    "safety_mode": true
+  },
+  
+  // CONECTORES NATIVOS G1
+  "native_connectors": {
+    // Conector TTS Nativo
+    "tts": {
+      "enabled": true,
+      "default_speaker_id": 0,
+      "timeout": 10.0,
+      "retry_attempts": 3,
+      "priority": "native_first", // native_first, native_only, fallback_only
+      "fallback_to_external": true
+    },
+    
+    // Conector LEDs Nativo
+    "leds": {
+      "enabled": true,
+      "default_brightness": 0.5,
+      "transition_time": 0.2,
+      "emotion_colors": {
+        "happy": {"r": 255, "g": 255, "b": 0},
+        "sad": {"r": 0, "g": 0, "b": 255},
+        "excited": {"r": 255, "g": 0, "b": 0},
+        "calm": {"r": 0, "g": 255, "b": 0},
+        "neutral": {"r": 128, "g": 128, "b": 128},
+        "thinking": {"r": 255, "g": 165, "b": 0},
+        "surprised": {"r": 255, "g": 0, "b": 255},
+        "focused": {"r": 0, "g": 255, "b": 255}
+      }
+    },
+    
+    // Conector Áudio Nativo
+    "audio": {
+      "enabled": true,
+      "default_volume": 50,
+      "max_volume": 100,
+      "min_volume": 0,
+      "auto_volume_control": true
+    }
+  },
+  
+  // Inputs Multimodais (usando conectores nativos quando disponível)
+  "agent_inputs": {
+    "G1Voice": {
+      "enabled": true,
+      "language": "pt-BR",
+      "sensitivity": 0.8,
+      "noise_suppression": true,
+      "continuous_listening": true,
+      "wake_word": "G1",
+      "mock_mode": false,
+      "microphone_index": 0,
+      "sample_rate": 16000,
+      "chunk_size": 1024,
+      "use_native_asr": true, // Tenta usar ASR nativo se disponível
+      "fallback_to_external": true
+    },
+    "G1Vision": {
+      "enabled": true,
+      "camera_index": 0,
+      "resolution": [1280, 720],
+      "fps": 30,
+      "mock_mode": false,
+      "detection_enabled": true,
+      "face_recognition": true,
+      "object_detection": true,
+      "motion_detection": true
+    },
+    "G1Sensors": {
+      "enabled": true,
+      "battery_monitoring": true,
+      "temperature_monitoring": true,
+      "imu_monitoring": true,
+      "update_interval": 0.2,
+      "mock_mode": false
+    }
+  },
+  
+  // Actions (usando conectores nativos quando disponível)
+  "agent_actions": {
+    "G1Speech": {
+      "enabled": true,
+      "tts_provider": "native_first", // native_first, native_only, external_only
+      "voice_id": "g1_default",
+      "speech_rate": 1.0,
+      "volume": 0.6,
+      "language": "pt-BR",
+      "emotion_in_speech": true,
+      "use_native_tts": true, // Usa conector TTS nativo
+      "fallback_to_external": true
+    },
+    "G1Emotion": {
+      "enabled": true,
+      "led_brightness": 0.5,
+      "emotion_transition_time": 0.2,
+      "default_emotion": "neutral",
+      "use_native_leds": true, // Usa conector LEDs nativo
+      "fallback_to_external": false
+    },
+    "G1Audio": {
+      "enabled": true,
+      "volume_control": true,
+      "audio_effects": true,
+      "equalization": true,
+      "use_native_audio": true, // Usa conector áudio nativo
+      "fallback_to_external": false
+    }
+  },
+  
+  // Sistema de Conversação Integrado
+  "conversation_engine": {
+    "enabled": true,
+    "enable_vision_context": true,
+    "enable_gesture_sync": true,
+    "enable_emotion_detection": true,
+    "conversation_timeout": 30.0,
+    "response_delay": 0.5,
+    "use_native_connectors": true // Habilita uso de conectores nativos
+  },
+  
+  // Fuser
+  "fuser": {
+    "type": "priority",
+    "config": {
+      "voice_priority": 1.0,
+      "vision_priority": 0.8,
+      "sensors_priority": 0.5,
+      "fusion_timeout": 1.0,
+      "context_window": 3
+    }
+  },
+  
+  // LLM
+  "llm": {
+    "provider": "mock",
+    "model": "mock-g1-native",
+    "temperature": 0.7,
+    "max_tokens": 500,
+    "timeout": 30.0,
+    "response_delay": 0.5,
+    "error_rate": 0.0,
+    "include_vision": true,
+    "include_sensors": true,
+    "include_location": true,
+    "include_robot_state": true,
+    "debug_llm": false
+  },
+  
+  // G1 Controller
+  "g1_controller": {
+    "enabled": true,
+    "mock_mode": false,
+    "interface": {
+      "robot_ip": "192.168.123.161",
+      "robot_port": 8080,
+      "timeout": 5.0,
+      "retry_attempts": 3,
+      "safety_mode": "normal",
+      "emergency_stop": true,
+      "max_speed": 0.5,
+      "max_turn_speed": 0.3
+    },
+    "default_speed": 0.3,
+    "default_turn_speed": 0.2,
+    "movement_timeout": 10.0,
+    "gesture_speed": 0.5,
+    "gesture_timeout": 5.0,
+    "max_history": 100
+  },
+  
+  // WebSim
+  "websim": {
+    "enabled": true,
+    "host": "localhost",
+    "port": 8080,
+    "debug": true,
+    "auto_reload": true,
+    "static_dir": "static",
+    "templates_dir": "templates",
+    "max_connections": 10,
+    "update_interval": 0.1
+  },
+  
+  // Logging
+  "logging": {
+    "level": "INFO",
+    "log_format": "detailed",
+    "file": "logs/t031a5_native_connectors.log"
+  }
+}

@@ -1,0 +1,249 @@
+{
+  // Configuração para TESTE NO ROBÔ G1 REAL
+  // Configuração otimizada para teste físico no robô
+  
+  // Configurações básicas do sistema
+  "name": "G1 Test Robot",
+  "hertz": 8, // Frequência otimizada para teste
+  "system_prompt_base": "Você é um assistente robótico G1 em modo de teste. Seja cuidadoso e seguro. Responda de forma simples e direta.",
+  "development": {
+    "websim_enabled": true,
+    "debug_mode": true,
+    "hot_reload": false
+  },
+  
+  // Características específicas do G1
+  "g1_specific": {
+    "robot_type": "unitree_g1",
+    "capabilities": [
+      "bipedal_locomotion",
+      "arm_manipulation", 
+      "computer_vision",
+      "audio_processing",
+      "conversational_ai",
+      "emotional_expression",
+      "gesture_recognition"
+    ],
+    "safety_mode": "strict", // Modo de segurança rigoroso
+    "emergency_stop": true,
+    "max_speed": 0.3, // Velocidade reduzida para teste
+    "max_turn_speed": 0.2
+  },
+  
+  // CONECTORES NATIVOS G1 (OTIMIZAÇÃO)
+  "native_connectors": {
+    "tts": {
+      "enabled": true,
+      "default_speaker_id": 0,
+      "timeout": 10.0,
+      "retry_attempts": 3,
+      "priority": "native_first",
+      "fallback_to_external": true
+    },
+    "leds": {
+      "enabled": true,
+      "default_brightness": 0.7,
+      "transition_time": 0.3,
+      "emotion_colors": {
+        "happy": {"r": 255, "g": 255, "b": 0},
+        "sad": {"r": 0, "g": 0, "b": 255},
+        "excited": {"r": 255, "g": 0, "b": 0},
+        "calm": {"r": 0, "g": 255, "b": 0},
+        "neutral": {"r": 128, "g": 128, "b": 128},
+        "thinking": {"r": 255, "g": 165, "b": 0},
+        "surprised": {"r": 255, "g": 0, "b": 255},
+        "focused": {"r": 0, "g": 255, "b": 255}
+      }
+    },
+    "audio": {
+      "enabled": true,
+      "default_volume": 60,
+      "max_volume": 80,
+      "min_volume": 20,
+      "auto_volume_control": true
+    }
+  },
+  
+  // Inputs Multimodais (OTIMIZADOS PARA TESTE)
+  "agent_inputs": {
+    "G1Voice": {
+      "enabled": true,
+      "language": "pt-BR",
+      "sensitivity": 0.9,
+      "noise_suppression": true,
+      "continuous_listening": false, // Desabilitado para teste
+      "wake_word": "G1",
+      "mock_mode": false,
+      "microphone_index": 0,
+      "sample_rate": 16000,
+      "chunk_size": 1024,
+      "use_native_asr": true,
+      "fallback_to_external": true,
+      "test_mode": true
+    },
+    "G1Vision": {
+      "enabled": true,
+      "camera_index": 0,
+      "resolution": [1280, 720],
+      "fps": 15, // Reduzido para teste
+      "mock_mode": false,
+      "detection_enabled": true,
+      "face_recognition": false, // Desabilitado para teste
+      "object_detection": false, // Desabilitado para teste
+      "motion_detection": true,
+      "test_mode": true
+    },
+    "G1Sensors": {
+      "enabled": true,
+      "battery_monitoring": true,
+      "temperature_monitoring": true,
+      "imu_monitoring": true,
+      "update_interval": 0.5, // Reduzido para teste
+      "mock_mode": false,
+      "alert_thresholds": {
+        "battery_low": 30,
+        "temperature_high": 40
+      }
+    }
+  },
+  
+  // Actions (OTIMIZADAS PARA TESTE)
+  "agent_actions": {
+    "G1Speech": {
+      "enabled": true,
+      "tts_provider": "native_first",
+      "voice_id": "g1_default",
+      "speech_rate": 0.9, // Reduzido para teste
+      "volume": 0.5,
+      "language": "pt-BR",
+      "emotion_in_speech": true,
+      "use_native_tts": true,
+      "fallback_to_external": true,
+      "test_mode": true
+    },
+    "G1Emotion": {
+      "enabled": true,
+      "led_brightness": 0.7,
+      "emotion_transition_time": 0.3,
+      "default_emotion": "neutral",
+      "use_native_leds": true,
+      "fallback_to_external": false,
+      "test_mode": true
+    },
+    "G1Movement": {
+      "enabled": true,
+      "max_speed": 0.3,
+      "max_turn_speed": 0.2,
+      "safety_distance": 1.0,
+      "enable_obstacle_detection": false, // Desabilitado para teste
+      "enable_navigation": false, // Desabilitado para teste
+      "test_mode": true
+    },
+    "G1Arms": {
+      "enabled": true,
+      "max_speed": 0.5,
+      "safety_mode": true,
+      "gesture_timeout": 3.0,
+      "test_mode": true
+    }
+  },
+  
+  // Sistema de Conversação (SIMPLIFICADO PARA TESTE)
+  "conversation_engine": {
+    "enabled": true,
+    "enable_vision_context": false, // Desabilitado para teste
+    "enable_gesture_sync": true,
+    "enable_emotion_detection": true,
+    "conversation_timeout": 15.0, // Reduzido para teste
+    "response_delay": 0.8,
+    "use_native_connectors": true,
+    "test_mode": true
+  },
+  
+  // Fuser
+  "fuser": {
+    "type": "priority",
+    "config": {
+      "voice_priority": 1.0,
+      "vision_priority": 0.3, // Reduzido para teste
+      "sensors_priority": 0.8,
+      "fusion_timeout": 2.0,
+      "context_window": 2
+    }
+  },
+  
+  // LLM (CONFIGURADO PARA TESTE)
+  "llm": {
+    "provider": "openai", // Usar OpenAI real para teste
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "max_tokens": 200, // Reduzido para teste
+    "timeout": 15.0,
+    "response_delay": 0.8,
+    "error_rate": 0.0,
+    "include_vision": false, // Desabilitado para teste
+    "include_sensors": true,
+    "include_location": false, // Desabilitado para teste
+    "include_robot_state": true,
+    "debug_llm": true,
+    "test_mode": true
+  },
+  
+  // G1 Controller (CONFIGURAÇÃO REAL)
+  "g1_controller": {
+    "enabled": true,
+    "mock_mode": false, // MODO REAL!
+    "interface": {
+      "robot_ip": "192.168.123.161",
+      "robot_port": 8080,
+      "local_interface": "en11", // Interface correta para macOS (equivalente ao eth0)
+      "local_ip": "192.168.123.99",
+      "timeout": 10.0,
+      "retry_attempts": 5,
+      "safety_mode": "strict",
+      "emergency_stop": true,
+      "max_speed": 0.3,
+      "max_turn_speed": 0.2,
+      "command_delay": 5.0, // Aguardar conclusão do comando
+      "return_to_initial": true // Sempre voltar ao estado inicial
+    },
+    "default_speed": 0.2,
+    "default_turn_speed": 0.1,
+    "movement_timeout": 15.0,
+    "gesture_speed": 0.3,
+    "gesture_timeout": 3.0,
+    "max_history": 50,
+    "test_mode": true
+  },
+  
+  // WebSim (PARA DEBUG REMOTO)
+  "websim": {
+    "enabled": true,
+    "host": "0.0.0.0", // Acessível externamente
+    "port": 8080,
+    "debug": true,
+    "auto_reload": false,
+    "static_dir": "static",
+    "templates_dir": "templates",
+    "max_connections": 5,
+    "update_interval": 0.2
+  },
+  
+  // Logging (DETALHADO PARA TESTE)
+  "logging": {
+    "level": "DEBUG",
+    "log_format": "detailed",
+    "file": "logs/g1_test_robot.log",
+    "console_output": true
+  },
+  
+  // Configurações de Teste
+  "test_config": {
+    "enabled": true,
+    "duration": 300, // 5 minutos
+    "auto_stop": true,
+    "safety_checks": true,
+    "performance_monitoring": true,
+    "emergency_contact": "test_mode"
+  }
+}
