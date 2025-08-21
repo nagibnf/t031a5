@@ -5,7 +5,7 @@ Teste Completo do Sistema t031a5 em Produção
 Executa validação completa de todos os componentes do sistema para
 garantir funcionamento em produção:
 
-- Sistema de áudio (DJI Mic 2 + Anker Soundcore)
+- Sistema híbrido de áudio (DJI principal + G1 backup + sistema)
 - Movimentos completos (50 movimentos)
 - Sistema conversacional integrado
 - Conectividade G1
@@ -24,6 +24,7 @@ from datetime import datetime
 
 # Adiciona src ao path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+sys.path.insert(0, "/home/unitree/t031a5/src")
 
 from t031a5.actions.g1_movement_mapping import G1MovementLibrary
 from unitree_sdk2py.core.channel import ChannelFactoryInitialize
@@ -107,9 +108,68 @@ class ProductionSystemTester:
             return False
     
     def test_audio_system(self) -> bool:
-        """Testa sistema de áudio."""
-        logger.info("🎵 Testando sistema de áudio...")
+        """Testa sistema híbrido de áudio."""
+        logger.info("🎵 Testando sistema híbrido de áudio...")
         
+        try:
+            # Importa o novo sistema híbrido
+            from t031a5.audio.hybrid_microphone_manager import HybridMicrophoneManager
+            
+            # Inicializa gerenciador híbrido
+            manager = HybridMicrophoneManager({
+                "sample_rate": 16000,
+                "test_duration": 2,
+                "auto_switch": True
+            })
+            
+            # Executa diagnóstico completo
+            results = manager.run_full_diagnostics()
+            
+            # Analisa resultados
+            current_mic = manager.current_source.value if manager.current_source else "none"
+            available_mics = []
+            working_mics = []
+            
+            for source, test in results["tests"].items():
+                if "quality_score" in test:
+                    score = test["quality_score"]
+                    available_mics.append(f"{source}({score}/100)")
+                    if score >= 30:  # Threshold mínimo
+                        working_mics.append(source)
+                else:
+                    available_mics.append(f"{source}(error)")
+            
+            # Verifica se sistema está funcional
+            has_working_mic = len(working_mics) > 0
+            has_dji_primary = manager.current_source.value == "dji_external" if manager.current_source else False
+            
+            if has_working_mic:
+                self.component_status["audio_system"] = True
+                details = f"Atual: {current_mic}, Funcionais: {working_mics}, DJI Principal: {has_dji_primary}"
+                self.log_test("Hybrid Audio System", True, details)
+                
+                # Log adicional sobre prioridades
+                if has_dji_primary:
+                    logger.info("✅ DJI Mic 2 funcionando como principal")
+                else:
+                    logger.info(f"⚠️ Usando fallback: {current_mic}")
+                
+                return True
+            else:
+                details = f"Disponíveis: {available_mics}, Nenhum funcional"
+                self.log_test("Hybrid Audio System", False, details)
+                return False
+                
+        except ImportError:
+            # Fallback para teste antigo se híbrido não disponível
+            logger.warning("⚠️ Sistema híbrido não disponível - usando teste básico")
+            return self._test_audio_fallback()
+        except Exception as e:
+            self.log_test("Hybrid Audio System", False, f"Exceção: {e}")
+            return False
+    
+    def _test_audio_fallback(self) -> bool:
+        """Teste de áudio básico como fallback."""
         try:
             import pyaudio
             
@@ -143,15 +203,15 @@ class ProductionSystemTester:
             if bluetooth_devices and total_inputs > 0 and total_outputs > 0:
                 self.component_status["audio_system"] = True
                 details = f"Dispositivos Bluetooth: {len(bluetooth_devices)}, Entradas: {total_inputs}, Saídas: {total_outputs}"
-                self.log_test("Audio System", True, details)
+                self.log_test("Audio System (Fallback)", True, details)
                 return True
             else:
                 details = f"Bluetooth: {len(bluetooth_devices)}, Entradas: {total_inputs}, Saídas: {total_outputs}"
-                self.log_test("Audio System", False, details)
+                self.log_test("Audio System (Fallback)", False, details)
                 return False
                 
         except Exception as e:
-            self.log_test("Audio System", False, f"Exceção: {e}")
+            self.log_test("Audio System (Fallback)", False, f"Exceção: {e}")
             return False
     
     def test_movement_library(self) -> bool:
@@ -406,7 +466,7 @@ class ProductionSystemTester:
         # Verificações de pré-requisitos
         logger.info("🔍 VERIFICAÇÕES DE PRÉ-REQUISITOS:")
         logger.info("1. G1 está em modo CONTROL? (R1 + X)")
-        logger.info("2. DJI Mic 2 está conectado via Bluetooth?")
+        logger.info("2. Sistema híbrido de áudio funcionando? (DJI principal)")
         logger.info("3. Anker Soundcore está conectado via Bluetooth?")
         logger.info("4. Espaço adequado para movimentos do robô?")
         logger.info("5. Supervisão humana ativa?")
@@ -480,7 +540,7 @@ class ProductionSystemTester:
                     status_text = "PASSOU" if result["success"] else "FALHOU"
                     f.write(f"- {test_name}: {status_text}\n")
                     if result["details"]:
-                        f.write(f"  Detalhes: {result["details"]}\n")
+                        f.write(f"  Detalhes: {result['details']}\n")
             
             logger.info(f"💾 Relatório salvo: {filename}")
             
