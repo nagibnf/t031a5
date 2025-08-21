@@ -3,98 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G1 WebSim - Sistema t031a5</title>
+    <title>G1 Tobias - Controle Mobile</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="connection-status" class="connection-status disconnected">Desconectado</div>
-    
-    <div class="container">
-        <div class="header">
-            <h1>🤖 G1 WebSim</h1>
-            <p>Interface de Controle e Monitoramento do Robô G1 (Tobias)</p>
+    <!-- Header com Status Principal -->
+    <header class="mobile-header">
+        <div class="header-top">
+            <div class="robot-name">
+                <span class="robot-icon">🤖</span>
+                <span>Tobias G1</span>
+            </div>
+            <div id="connection-status" class="connection-status disconnected">
+                <span class="status-dot"></span>
+                Desconectado
+            </div>
         </div>
         
-        <div class="content">
-            <!-- Status do Robô -->
-            <div class="status-grid">
-                <div class="status-card">
-                    <h3>Estado do Robô</h3>
-                    <div class="status-value" id="robot-state">Desconectado</div>
-                </div>
-                
-                <div class="status-card">
-                    <h3>Bateria</h3>
-                    <div class="status-value" id="battery-level">0.0%</div>
-                </div>
-                
-                <div class="status-card">
-                    <h3>Posição</h3>
-                    <div class="status-value" id="robot-position">Parado</div>
-                </div>
-                
-                <div class="status-card">
-                    <h3>Conexões</h3>
-                    <div class="status-value" id="connections">0</div>
-                </div>
+        <!-- Status Cards Horizontais -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-label">Bateria</div>
+                <div class="status-value" id="battery-level">--</div>
             </div>
-            
-            <!-- Controles -->
-            <div class="control-section">
-                <h2>Controles do Robô</h2>
-                
-                <div class="control-grid">
-                    <div class="control-group">
-                        <h3>Movimento</h3>
-                        <div class="button-group">
-                            <button onclick="sendCommand('move_forward')">⬆️ Frente</button>
-                            <button onclick="sendCommand('move_backward')">⬇️ Trás</button>
-                            <button onclick="sendCommand('turn_left')">⬅️ Esquerda</button>
-                            <button onclick="sendCommand('turn_right')">➡️ Direita</button>
-                            <button onclick="sendCommand('stop')">⏹️ Parar</button>
-                        </div>
-                    </div>
-                    
-                    <div class="control-group">
-                        <h3>Braços</h3>
-                        <div class="button-group">
-                            <button onclick="sendCommand('wave_hello')">👋 Acenar</button>
-                            <button onclick="sendCommand('thumbs_up')">👍 Positivo</button>
-                            <button onclick="sendCommand('arms_neutral')">🤲 Neutro</button>
-                            <button onclick="sendCommand('point_forward')">👉 Apontar</button>
-                        </div>
-                    </div>
-                    
-                    <div class="control-group">
-                        <h3>Expressões</h3>
-                        <div class="button-group">
-                            <button onclick="sendCommand('led_happy')">😊 Feliz</button>
-                            <button onclick="sendCommand('led_sad')">😢 Triste</button>
-                            <button onclick="sendCommand('led_thinking')">🤔 Pensando</button>
-                            <button onclick="sendCommand('led_off')">⚫ Desligar</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="status-item">
+                <div class="status-label">Estado</div>
+                <div class="status-value" id="robot-state">--</div>
             </div>
-            
-            <!-- Fala -->
-            <div class="speech-section">
-                <h2>Sistema de Fala</h2>
-                <div class="speech-controls">
-                    <input type="text" id="speech-text" placeholder="Digite o que Tobias deve falar...">
-                    <button onclick="sendSpeech()">🗣️ Falar</button>
-                </div>
-            </div>
-            
-            <!-- Log de Atividades -->
-            <div class="log-section">
-                <h2>Log de Atividades</h2>
-                <div id="activity-log" class="log-container">
-                    <div class="log-entry">Sistema iniciado - Aguardando conexão...</div>
-                </div>
+            <div class="status-item">
+                <div class="status-label">Posição</div>
+                <div class="status-value" id="robot-position">--</div>
             </div>
         </div>
+    </header>
+
+    <!-- BOTÃO DE EMERGÊNCIA - Sempre visível -->
+    <div class="emergency-stop" id="emergency-stop">
+        <button class="emergency-button" onclick="emergencyStop()">
+            <span class="emergency-icon">⏹️</span>
+            <span class="emergency-text">STOP</span>
+        </button>
     </div>
+
+    <!-- Streaming da Câmera -->
+    <section class="camera-section">
+        <div class="camera-container">
+            <div class="camera-header">
+                <h3>📹 Visão do Tobias</h3>
+                <div class="camera-controls">
+                    <button class="camera-btn" onclick="toggleCamera()">
+                        <span id="camera-toggle-icon">📹</span>
+                    </button>
+                    <button class="camera-btn" onclick="takeSnapshot()">📸</button>
+                </div>
+            </div>
+            <div class="camera-stream" id="camera-stream">
+                <div class="stream-placeholder">
+                    <span class="stream-icon">📹</span>
+                    <p>Camera Desconectada</p>
+                    <small>Toque para conectar</small>
+                </div>
+                <!-- <img id="camera-feed" src="/stream" alt="Camera Feed" style="display: none;"> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Navegação por Abas -->
+    <nav class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('controls')">
+            <span>🎮</span>
+            <span>Controles</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('expressions')">
+            <span>🎭</span>
+            <span>Expressões</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('speech')">
+            <span>🗣️</span>
+            <span>Fala</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('monitoring')">
+            <span>📊</span>
+            <span>Monitor</span>
+        </button>
+    </nav>
+
+    <!-- Conteúdo das Abas -->
+    <main class="main-content">
+        
+        <!-- Aba Controles -->
+        <section id="tab-controls" class="tab-content active">
+            <div class="section-title">Movimentação</div>
+            
+            <!-- Controle Direcional -->
+            <div class="movement-pad">
+                <button class="direction-btn up" onclick="sendCommand('move_forward')">
+                    <span>⬆️</span>
+                </button>
+                <div class="direction-row">
+                    <button class="direction-btn left" onclick="sendCommand('turn_left')">
+                        <span>⬅️</span>
+                    </button>
+                    <button class="direction-btn center" onclick="sendCommand('stop')">
+                        <span>⏹️</span>
+                    </button>
+                    <button class="direction-btn right" onclick="sendCommand('turn_right')">
+                        <span>➡️</span>
+                    </button>
+                </div>
+                <button class="direction-btn down" onclick="sendCommand('move_backward')">
+                    <span>⬇️</span>
+                </button>
+            </div>
+
+            <!-- Controles de Braço -->
+            <div class="section-title">Movimentos</div>
+            <div class="action-grid">
+                <button class="action-btn" onclick="sendCommand('release_arm')">
+                    <span>🤲</span>
+                    <span>Relaxar</span>
+                </button>
+                <button class="action-btn" onclick="sendCommand('clap')">
+                    <span>👏</span>
+                    <span>Aplaudir</span>
+                </button>
+                <button class="action-btn" onclick="sendCommand('shake_hand')">
+                    <span>🤝</span>
+                    <span>Cumprimentar</span>
+                </button>
+                <button class="action-btn" onclick="sendCommand('high_five')">
+                    <span>🙏</span>
+                    <span>High Five</span>
+                </button>
+                <button class="action-btn" onclick="sendCommand('hug')">
+                    <span>🤗</span>
+                    <span>Abraçar</span>
+                </button>
+                <button class="action-btn" onclick="sendCommand('right_hand_up')">
+                    <span>✋</span>
+                    <span>Mão Up</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Aba Expressões -->
+        <section id="tab-expressions" class="tab-content">
+            <div class="section-title">Estados Emocionais</div>
+            
+            <div class="emotion-grid">
+                <button class="emotion-btn happy" onclick="sendEmotion('happy')">
+                    <span class="emotion-icon">😊</span>
+                    <span class="emotion-label">Feliz</span>
+                    <div class="emotion-color happy-color"></div>
+                </button>
+                <button class="emotion-btn sad" onclick="sendEmotion('sad')">
+                    <span class="emotion-icon">😢</span>
+                    <span class="emotion-label">Triste</span>
+                    <div class="emotion-color sad-color"></div>
+                </button>
+                <button class="emotion-btn excited" onclick="sendEmotion('excited')">
+                    <span class="emotion-icon">🤩</span>
+                    <span class="emotion-label">Empolgado</span>
+                    <div class="emotion-color excited-color"></div>
+                </button>
+                <button class="emotion-btn calm" onclick="sendEmotion('calm')">
+                    <span class="emotion-icon">😌</span>
+                    <span class="emotion-label">Calmo</span>
+                    <div class="emotion-color calm-color"></div>
+                </button>
+                <button class="emotion-btn angry" onclick="sendEmotion('angry')">
+                    <span class="emotion-icon">😠</span>
+                    <span class="emotion-label">Bravo</span>
+                    <div class="emotion-color angry-color"></div>
+                </button>
+                <button class="emotion-btn surprised" onclick="sendEmotion('surprised')">
+                    <span class="emotion-icon">😲</span>
+                    <span class="emotion-label">Surpreso</span>
+                    <div class="emotion-color surprised-color"></div>
+                </button>
+                <button class="emotion-btn thinking" onclick="sendEmotion('thinking')">
+                    <span class="emotion-icon">🤔</span>
+                    <span class="emotion-label">Pensando</span>
+                    <div class="emotion-color thinking-color"></div>
+                </button>
+                <button class="emotion-btn neutral" onclick="sendEmotion('neutral')">
+                    <span class="emotion-icon">😐</span>
+                    <span class="emotion-label">Neutro</span>
+                    <div class="emotion-color neutral-color"></div>
+                </button>
+            </div>
+
+            <!-- Controle de Brilho -->
+            <div class="brightness-control">
+                <div class="section-title">Brilho dos LEDs</div>
+                <div class="slider-container">
+                    <span>🔅</span>
+                    <input type="range" id="brightness-slider" min="0" max="100" value="100" 
+                           oninput="setBrightness(this.value)">
+                    <span>🔆</span>
+                </div>
+                <div class="brightness-value" id="brightness-value">100%</div>
+            </div>
+        </section>
+
+        <!-- Aba Fala -->
+        <section id="tab-speech" class="tab-content">
+            <div class="section-title">Sistema de Fala</div>
+            
+            <!-- Entrada de Texto -->
+            <div class="speech-input">
+                <textarea id="speech-text" placeholder="Digite o que Tobias deve falar..." 
+                         rows="3" maxlength="200"></textarea>
+                <div class="speech-controls">
+                    <div class="char-counter">
+                        <span id="char-count">0</span>/200
+                    </div>
+                    <button class="speech-btn" onclick="sendSpeech()">
+                        <span>🗣️</span>
+                        <span>Falar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Frases Rápidas -->
+            <div class="section-title">Frases Rápidas</div>
+            <div class="quick-phrases">
+                <button class="phrase-btn" onclick="quickSpeech('Hello, I am Tobias!')">
+                    <span>👋</span>
+                    <span>Apresentação</span>
+                </button>
+                <button class="phrase-btn" onclick="quickSpeech('Thank you very much!')">
+                    <span>🙏</span>
+                    <span>Obrigado</span>
+                </button>
+                <button class="phrase-btn" onclick="quickSpeech('Nice to meet you!')">
+                    <span>😊</span>
+                    <span>Prazer</span>
+                </button>
+                <button class="phrase-btn" onclick="quickSpeech('See you later!')">
+                    <span>👋</span>
+                    <span>Tchau</span>
+                </button>
+                <button class="phrase-btn" onclick="quickSpeech('System is ready!')">
+                    <span>✅</span>
+                    <span>Sistema OK</span>
+                </button>
+                <button class="phrase-btn" onclick="quickSpeech('Low battery warning!')">
+                    <span>🔋</span>
+                    <span>Bateria Baixa</span>
+                </button>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="volume-control">
+                <div class="section-title">Volume da Voz</div>
+                <div class="slider-container">
+                    <span>🔈</span>
+                    <input type="range" id="volume-slider" min="0" max="100" value="80" 
+                           oninput="setVolume(this.value)">
+                    <span>🔊</span>
+                </div>
+                <div class="volume-value" id="volume-value">80%</div>
+            </div>
+        </section>
+
+        <!-- Aba Monitoramento -->
+        <section id="tab-monitoring" class="tab-content">
+            <div class="section-title">Status Detalhado</div>
+            
+            <!-- Status Expandido -->
+            <div class="status-cards">
+                <div class="status-card">
+                    <div class="card-icon">🔋</div>
+                    <div class="card-content">
+                        <div class="card-label">Bateria</div>
+                        <div class="card-value" id="detailed-battery">--</div>
+                        <div class="card-extra" id="battery-time">--</div>
+                    </div>
+                </div>
+                
+                <div class="status-card">
+                    <div class="card-icon">🌡️</div>
+                    <div class="card-content">
+                        <div class="card-label">Temperatura</div>
+                        <div class="card-value" id="temperature">--°C</div>
+                        <div class="card-extra">Sistema</div>
+                    </div>
+                </div>
+                
+                <div class="status-card">
+                    <div class="card-icon">📡</div>
+                    <div class="card-content">
+                        <div class="card-label">Conectividade</div>
+                        <div class="card-value" id="connectivity">--</div>
+                        <div class="card-extra" id="signal-strength">--</div>
+                    </div>
+                </div>
+                
+                <div class="status-card">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-content">
+                        <div class="card-label">Performance</div>
+                        <div class="card-value" id="performance">--</div>
+                        <div class="card-extra">CPU/GPU</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log de Atividades -->
+            <div class="section-title">Log de Atividades</div>
+            <div class="log-container" id="activity-log">
+                <div class="log-entry system">
+                    <span class="log-time">--:--:--</span>
+                    <span class="log-message">Sistema iniciado - Aguardando conexão...</span>
+                </div>
+            </div>
+
+            <!-- Controles de Sistema -->
+            <div class="section-title">Controles de Sistema</div>
+            <div class="system-controls">
+                <button class="system-btn restart" onclick="systemCommand('restart')">
+                    <span>🔄</span>
+                    <span>Reiniciar</span>
+                </button>
+                <button class="system-btn shutdown" onclick="systemCommand('shutdown')">
+                    <span>⏻</span>
+                    <span>Desligar</span>
+                </button>
+                <button class="system-btn reset" onclick="systemCommand('reset')">
+                    <span>🔧</span>
+                    <span>Reset</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer com informações -->
+    <footer class="mobile-footer">
+        <div class="footer-info">
+            <span>Sistema t031a5 | Tobias G1</span>
+            <span id="last-update">Última atualização: --:--:--</span>
+        </div>
+    </footer>
 
     <script src="/static/websim.js"></script>
 </body>

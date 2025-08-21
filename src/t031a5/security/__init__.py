@@ -1,11 +1,13 @@
 """
-Módulo de Segurança.
-Gerencia APIs e configurações sensíveis de forma segura.
+Sistema de Segurança para t031a5
 """
 
-from .api_manager import SimpleAPIManager, APIConfig
+from .safety_manager import SafetyManager, SafetyLevel, SafetyRule, SafetyEvent, SafetyConfig
 
 __all__ = [
-    "SimpleAPIManager",
-    "APIConfig"
+    "SafetyManager",
+    "SafetyLevel", 
+    "SafetyRule",
+    "SafetyEvent",
+    "SafetyConfig"
 ]
