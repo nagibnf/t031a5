@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""🤖 TESTE SISTEMA CONVERSAÇÃO - ARQUIVO ÚNICO PRINCIPAL
-Teste completo: DJI Mic → Google STT → LLM → ElevenLabs TTS → Anker + G1 Movimentos
+"""🤖 SISTEMA CONVERSAÇÃO COMPLETO - ARQUIVO PRINCIPAL
+Sistema conversacional end-to-end: DJI Mic → Google STT → LLM → ElevenLabs TTS → Anker + G1 Movimentos
 """
 
 import sys
@@ -14,9 +14,9 @@ sys.path.insert(0, "/home/unitree/t031a5/src")
 # Configurar logging mais limpo
 logging.basicConfig(level=logging.ERROR)
 
-print('🤖 TESTE DE CONVERSAÇÃO INTERATIVA')
+print('🤖 SISTEMA CONVERSAÇÃO COMPLETO - G1 TOBIAS')
 print('='*60)
-print('🎯 OBJETIVO: Validar fluxo completo DJI → Google STT → LLM → ElevenLabs TTS → Anker + G1')
+print('🎯 OBJETIVO: Sistema conversacional end-to-end funcional')
 print('📋 INSTRUÇÕES: Fale CLARAMENTE no DJI Mic quando solicitado')
 print('='*60)
 
@@ -99,8 +99,8 @@ async def aguardar_fala_real(audio_mgr, max_tentativas=5):
     print('❌ Não foi possível capturar fala após várias tentativas')
     return None
 
-async def teste_conversacao_completa():
-    """Teste conversacional completo com G1 movimentos."""
+async def executar_sistema_conversacao():
+    """Executa sistema conversacional completo com G1 movimentos."""
     
     try:
         # Importar e inicializar
@@ -220,15 +220,15 @@ async def teste_conversacao_completa():
             print('\n⏳ Aguardando 3s antes do próximo ciclo...')
             await asyncio.sleep(3)
         
-        print('\n🎯 TESTE CONVERSACIONAL FINALIZADO!')
+        print('\n🎯 SISTEMA CONVERSACIONAL FINALIZADO!')
         print('🎉 PARABÉNS! Sistema funcionando end-to-end!')
         
     except KeyboardInterrupt:
-        print('\n🛑 Teste interrompido pelo usuário')
+        print('\n🛑 Sistema interrompido pelo usuário')
     except Exception as e:
         print(f'❌ Erro crítico: {e}')
         import traceback
         traceback.print_exc()
 
 if __name__ == "__main__":
-    asyncio.run(teste_conversacao_completa())
+    asyncio.run(executar_sistema_conversacao())

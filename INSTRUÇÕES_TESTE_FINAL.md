@@ -12,12 +12,12 @@
 
 ## 🚀 **COMO TESTAR O SISTEMA:**
 
-### **1. Teste Conversacional Interativo - ARQUIVO ÚNICO (RECOMENDADO)**
+### **1. Sistema Conversação Completo - ARQUIVO PRINCIPAL (RECOMENDADO)**
 ```bash
 ssh unitree@192.168.123.164
 cd t031a5
 source venv/bin/activate
-python3 teste_conversacao_interativa.py
+python3 sistema_conversacao_completo.py
 ```
 
 **📋 O que o sistema fará:**
@@ -84,19 +84,18 @@ python3 sistema_conversacao_real_completo.py
 - 🔄 Retorno à posição neutra após movimento
 - 🦾 Integração completa com biblioteca de movimentos
 
-### **✅ Arquivo Único de Teste:**
-- 📝 `teste_conversacao_interativa.py` consolidado
-- 🧹 Sem duplicação de arquivos de teste
-- 🎯 Funcionalidade completa em um script
+### **✅ Arquivo Principal Único:**
+- 📝 `sistema_conversacao_completo.py` - arquivo principal do sistema
+- 🧹 Sem duplicação de arquivos, limpeza completa de arquivos temporários
+- 🎯 Funcionalidade completa em um script definitivo
 
-## 📈 **CONFIGURAÇÕES OPCIONAIS:**
+## ✅ **SISTEMA PRONTO - CREDENCIAIS CONFIGURADAS:**
 
-### **🔑 Para TTS Premium ElevenLabs:**
-```bash
-# No arquivo .env, adicionar:
-ELEVENLABS_API_KEY=...         # Para TTS premium de alta qualidade
-OPENAI_API_KEY=sk-...          # Para STT Whisper + LLM GPT (opcional)
-```
+### **🔑 APIs Funcionais:**
+- ✅ Google Speech API: Configurado e operacional
+- ✅ ElevenLabs TTS: Pronto para síntese premium
+- ✅ OpenAI API: STT Whisper + LLM GPT disponíveis
+- ✅ Todas as credenciais já estão no .env
 
 ### **🦾 Ollama Local (Opcional):**
 ```bash
