@@ -197,7 +197,7 @@ t031a5/
 - **🎭 Actions**: 5 tipos + biblioteca movimentos
 - **🧠 LLM**: 3 providers (OpenAI, Ollama, Mock)
 - **🔗 Fuser**: 2 estratégias (Multimodal, Priority)
-- **🌐 Auxiliares**: WebSim, Audio, Vision, Speech
+- **🌐 Auxiliares Reais**: Connectors, Unitree (órfãos removidos)
 - **🔧 Scripts**: Teste, Deploy, Monitor
 - **📚 Docs**: Completa e organizada
 
@@ -206,6 +206,13 @@ t031a5/
 - **Adicionados**: Intel D435i, GPT-4 principal, Ollama fallback
 - **Integrados**: Mappings corretos em actions
 - **Consolidados**: Configuração única em g1_production.json5
+
+### **🧹 Limpeza Total Realizada:**
+- **❌ speech/** - DELETADO (auxiliares órfãos)
+- **❌ vision/** - DELETADO (auxiliares órfãos)  
+- **❌ audio/** - DELETADO (auxiliares órfãos)
+- **-15 arquivos** órfãos removidos (~4000 linhas)
+- **Zero redundância** restante
 
 ### **🚀 Pronto para:**
 - **Deploy na Jetson** com G1 Tobias
