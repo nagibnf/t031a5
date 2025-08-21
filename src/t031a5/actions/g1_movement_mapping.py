@@ -304,9 +304,10 @@ class G1MovementLibrary:
     }
     
     # ============================================================================
-    # 🚶 COMANDOS DE LOCOMOÇÃO (4 CONFIRMADOS)
+    # 🚶 COMANDOS DE LOCOMOÇÃO (4 BÁSICOS + 16 AVANÇADOS = 20 TOTAL)
     # ============================================================================
     LOCOMOTION_COMMANDS = {
+        # COMANDOS BÁSICOS (CONFIRMADOS)
         "damp": G1Movement(
             id=-1,  # Comandos de locomoção não usam ID numérico
             name="damp",
@@ -341,6 +342,178 @@ class G1MovementLibrary:
             description="Postura baixa - postura agachada",
             movement_type=G1MovementType.LOCOMOTION,
             duration=2.0,
+            requires_relax=False
+        ),
+        
+        # MOVIMENTOS DIRECIONAIS (VIA LOCO_CLIENT)
+        "move_forward": G1Movement(
+            id=-2,
+            name="move_forward",
+            display_name="Mover Para Frente",
+            description="Movimento para frente (vx=0.2, vy=0.0, vyaw=0.0)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "move_backward": G1Movement(
+            id=-2,
+            name="move_backward",
+            display_name="Mover Para Trás",
+            description="Movimento para trás (vx=-0.2, vy=0.0, vyaw=0.0)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "move_left": G1Movement(
+            id=-2,
+            name="move_left",
+            display_name="Mover Para Esquerda",
+            description="Movimento lateral esquerdo (vx=0.0, vy=0.2, vyaw=0.0)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "move_right": G1Movement(
+            id=-2,
+            name="move_right",
+            display_name="Mover Para Direita",
+            description="Movimento lateral direito (vx=0.0, vy=-0.2, vyaw=0.0)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        
+        # ROTAÇÕES COM VELOCIDADES ESPECÍFICAS
+        "rotate_left_slow": G1Movement(
+            id=-3,
+            name="rotate_left_slow",
+            display_name="Rotação Esquerda Lenta",
+            description="Rotação para esquerda lenta (vyaw=0.2 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_right_slow": G1Movement(
+            id=-3,
+            name="rotate_right_slow",
+            display_name="Rotação Direita Lenta",
+            description="Rotação para direita lenta (vyaw=-0.2 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_left_medium": G1Movement(
+            id=-3,
+            name="rotate_left_medium",
+            display_name="Rotação Esquerda Média",
+            description="Rotação para esquerda média (vyaw=0.5 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_right_medium": G1Movement(
+            id=-3,
+            name="rotate_right_medium",
+            display_name="Rotação Direita Média",
+            description="Rotação para direita média (vyaw=-0.5 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_left_fast": G1Movement(
+            id=-3,
+            name="rotate_left_fast",
+            display_name="Rotação Esquerda Rápida",
+            description="Rotação para esquerda rápida (vyaw=1.0 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_right_fast": G1Movement(
+            id=-3,
+            name="rotate_right_fast",
+            display_name="Rotação Direita Rápida",
+            description="Rotação para direita rápida (vyaw=-1.0 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_left_max": G1Movement(
+            id=-3,
+            name="rotate_left_max",
+            display_name="Rotação Esquerda Máxima",
+            description="Rotação para esquerda máxima (vyaw=1.5 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        "rotate_right_max": G1Movement(
+            id=-3,
+            name="rotate_right_max",
+            display_name="Rotação Direita Máxima",
+            description="Rotação para direita máxima (vyaw=-1.5 rad/s)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=3.0,
+            requires_relax=False
+        ),
+        
+        # PADRÕES COMPLEXOS
+        "circular_movement": G1Movement(
+            id=-4,
+            name="circular_movement",
+            display_name="Movimento Circular",
+            description="Movimento circular (vx=0.1, vyaw=0.4) por 10 segundos",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=10.0,
+            requires_relax=False
+        ),
+        "figure_eight": G1Movement(
+            id=-4,
+            name="figure_eight",
+            display_name="Figura 8",
+            description="Movimento em figura 8 (curvas alternadas)",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=8.0,
+            requires_relax=False
+        ),
+        
+        # CONTROLE DE BALANCEAMENTO
+        "balance_mode_0": G1Movement(
+            id=-5,
+            name="balance_mode_0",
+            display_name="Balanceamento Modo 0",
+            description="BalanceStand modo 0",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=2.0,
+            requires_relax=False
+        ),
+        "balance_mode_1": G1Movement(
+            id=-5,
+            name="balance_mode_1",
+            display_name="Balanceamento Modo 1",
+            description="BalanceStand modo 1",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=2.0,
+            requires_relax=False
+        ),
+        "balance_mode_2": G1Movement(
+            id=-5,
+            name="balance_mode_2",
+            display_name="Balanceamento Modo 2",
+            description="BalanceStand modo 2",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=2.0,
+            requires_relax=False
+        ),
+        
+        # COMANDO DE PARADA
+        "stop_movement": G1Movement(
+            id=-6,
+            name="stop_movement",
+            display_name="Parar Movimento",
+            description="StopMove() - para todos os movimentos",
+            movement_type=G1MovementType.LOCOMOTION,
+            duration=1.0,
             requires_relax=False
         )
     }
@@ -475,12 +648,20 @@ class G1MovementLibrary:
         """Retorna estatísticas dos movimentos."""
         return {
             "arm_movements": len(cls.ARM_MOVEMENTS),
-            "fsm_states": len(cls.FSM_STATES),
+            "fsm_states": len(cls.FSM_STATES), 
             "locomotion_commands": len(cls.LOCOMOTION_COMMANDS),
             "total_movements": len(cls.ARM_MOVEMENTS) + len(cls.FSM_STATES) + len(cls.LOCOMOTION_COMMANDS),
             "unavailable_movements": len(cls.UNAVAILABLE_MOVEMENTS),
             "movement_patterns": len(cls.MOVEMENT_PATTERNS),
-            "success_rate": f"{len(cls.ARM_MOVEMENTS)}/{len(cls.ARM_MOVEMENTS) + len(cls.UNAVAILABLE_MOVEMENTS)} ({(len(cls.ARM_MOVEMENTS)/(len(cls.ARM_MOVEMENTS) + len(cls.UNAVAILABLE_MOVEMENTS)) * 100):.0f}%)"
+            "success_rate": f"{len(cls.ARM_MOVEMENTS)}/{len(cls.ARM_MOVEMENTS) + len(cls.UNAVAILABLE_MOVEMENTS)} ({(len(cls.ARM_MOVEMENTS)/(len(cls.ARM_MOVEMENTS) + len(cls.UNAVAILABLE_MOVEMENTS)) * 100):.0f}%)",
+            "locomotion_breakdown": {
+                "basic_commands": 4,  # damp, sit, highstand, lowstand
+                "directional_movements": 4,  # forward, backward, left, right
+                "rotation_speeds": 8,  # 4 velocidades x 2 direções
+                "complex_patterns": 2,  # circular, figure_eight
+                "balance_modes": 3,  # 3 modos de balanceamento
+                "control_commands": 1  # stop_movement
+            }
         }
 
 
@@ -537,12 +718,26 @@ def validate_movement_sequence(movement_ids: List[int]) -> List[str]:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🤖 G1 MOVEMENT LIBRARY - ESTATÍSTICAS")
-    print("=" * 50)
+    print("🤖 G1 MOVEMENT LIBRARY - ESTATÍSTICAS COMPLETAS")
+    print("=" * 60)
     
     stats = G1MovementLibrary.get_statistics()
-    for key, value in stats.items():
-        print(f"{key.replace('_', ' ').title()}: {value}")
+    print(f"📊 RESUMO GERAL:")
+    print(f"   Total de Movimentos: {stats['total_movements']}")
+    print(f"   Movimentos de Braços: {stats['arm_movements']}")
+    print(f"   Estados FSM: {stats['fsm_states']}")
+    print(f"   Comandos de Locomoção: {stats['locomotion_commands']}")
+    print(f"   Padrões de Movimento: {stats['movement_patterns']}")
+    print(f"   Taxa de Sucesso: {stats['success_rate']}")
+    
+    loco_breakdown = stats['locomotion_breakdown']
+    print(f"\n🚶 DETALHAMENTO LOCOMOÇÃO:")
+    print(f"   Comandos Básicos: {loco_breakdown['basic_commands']}")
+    print(f"   Movimentos Direcionais: {loco_breakdown['directional_movements']}")
+    print(f"   Velocidades de Rotação: {loco_breakdown['rotation_speeds']}")
+    print(f"   Padrões Complexos: {loco_breakdown['complex_patterns']}")
+    print(f"   Modos de Balanceamento: {loco_breakdown['balance_modes']}")
+    print(f"   Comandos de Controle: {loco_breakdown['control_commands']}")
     
     print("\n🤚 MOVIMENTOS DE BRAÇOS DISPONÍVEIS:")
     for movement_id, movement in G1MovementLibrary.ARM_MOVEMENTS.items():
@@ -552,9 +747,12 @@ if __name__ == "__main__":
     for state_id, state in G1MovementLibrary.FSM_STATES.items():
         print(f"  ID {state_id:3d}: {state.display_name} - {state.description}")
     
-    print("\n🚶 COMANDOS DE LOCOMOÇÃO:")
-    for cmd_name, cmd in G1MovementLibrary.LOCOMOTION_COMMANDS.items():
-        print(f"  {cmd_name:9s}: {cmd.display_name} - {cmd.description}")
+    print("\n🚶 COMANDOS DE LOCOMOÇÃO (AMOSTRA):")
+    loco_items = list(G1MovementLibrary.LOCOMOTION_COMMANDS.items())
+    for cmd_name, cmd in loco_items[:8]:  # Mostra apenas os primeiros 8
+        print(f"  {cmd_name:20s}: {cmd.display_name}")
+    if len(loco_items) > 8:
+        print(f"  ... e mais {len(loco_items) - 8} comandos")
     
     print("\n🎭 PADRÕES DE MOVIMENTO:")
     for pattern_name, pattern in G1MovementLibrary.MOVEMENT_PATTERNS.items():

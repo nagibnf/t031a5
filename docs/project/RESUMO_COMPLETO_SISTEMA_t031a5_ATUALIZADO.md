@@ -58,7 +58,7 @@ t031a5/
 
 #### **3. 🎭 OUTPUTS (Ações):**
 - **G1 Speech** - TTS apenas para alertas de sistema (inglês) ✅
-- **G1 Arms** - Sistema de movimentos (20 gestos + 8 FSM + 4 locomoção = 32 movimentos) ✅
+- **G1 Arms** - Sistema de movimentos (20 gestos + 8 FSM + 22 locomoção = 50 movimentos) ✅
 - **G1 Emotion** - LEDs expressivos (10 emoções) com pulsação sincronizada ✅
 - **G1 Movement** - Locomoção, posturas e giros com os pés ✅
 - **G1 Audio** - Áudio via Bluetooth Anker + efeitos contextuais 📋
@@ -86,7 +86,7 @@ client.Init()
 client.ExecuteAction(action_map.get("shake hand"))  # Funciona!
 ```
 
-### **📊 LISTA COMPLETA DE MOVIMENTOS G1 (20 movimentos + FSM + Locomoção):**
+### **📊 LISTA COMPLETA DE MOVIMENTOS G1 (50 MOVIMENTOS TOTAIS):**
 
 #### **🤚 MOVIMENTOS DE BRAÇOS (20 confirmados):**
 ```
@@ -126,13 +126,41 @@ ID     NOME              DESCRIÇÃO                    USO
 706 →  Squat2StandUp  →  Agachar para levantar     →  Transição
 ```
 
-#### **🚶 COMANDOS DE LOCOMOÇÃO:**
+#### **🚶 COMANDOS DE LOCOMOÇÃO (22 comandos):**
 ```
-COMANDO      NOME           DESCRIÇÃO              USO
-damp      →  Damping     →  Amortecimento       →  Funciona em qualquer estado
-sit       →  Sit         →  Sentar              →  Postura sentada
-highstand →  High Stand  →  Postura alta        →  Postura ereta
-lowstand  →  Low Stand   →  Postura baixa       →  Postura agachada
+BÁSICOS (4):
+damp           →  Amortecimento          →  Funciona em qualquer estado
+sit            →  Sentar                 →  Postura sentada  
+highstand      →  Postura alta           →  Postura ereta
+lowstand       →  Postura baixa          →  Postura agachada
+
+DIRECIONAIS (4):
+move_forward   →  Mover Para Frente      →  Movimento frontal
+move_backward  →  Mover Para Trás        →  Movimento traseiro
+move_left      →  Mover Para Esquerda    →  Movimento lateral esquerdo
+move_right     →  Mover Para Direita     →  Movimento lateral direito
+
+ROTAÇÕES (8):
+rotate_left_slow    →  Rotação Esquerda Lenta   →  0.2 rad/s
+rotate_right_slow   →  Rotação Direita Lenta    →  0.2 rad/s
+rotate_left_medium  →  Rotação Esquerda Média   →  0.5 rad/s
+rotate_right_medium →  Rotação Direita Média    →  0.5 rad/s
+rotate_left_fast    →  Rotação Esquerda Rápida  →  1.0 rad/s
+rotate_right_fast   →  Rotação Direita Rápida   →  1.0 rad/s
+rotate_left_max     →  Rotação Esquerda Máxima  →  1.5 rad/s
+rotate_right_max    →  Rotação Direita Máxima   →  1.5 rad/s
+
+PADRÕES (2):
+circular_movement   →  Movimento Circular       →  Circular 10s
+figure_eight        →  Figura 8                 →  Padrão complexo
+
+BALANCEAMENTO (3):
+balance_mode_0      →  Balanceamento Modo 0     →  BalanceStand
+balance_mode_1      →  Balanceamento Modo 1     →  BalanceStand
+balance_mode_2      →  Balanceamento Modo 2     →  BalanceStand
+
+CONTROLE (1):
+stop_movement       →  Parar Movimento          →  StopMove()
 ```
 
 ---
