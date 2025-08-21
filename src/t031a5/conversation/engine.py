@@ -107,16 +107,53 @@ class ConversationEngine:
         self.conversation_timeout = config.get("conversation_timeout", 30.0)
         self.response_delay = config.get("response_delay", 0.5)
         
-        # Sistema de gestos sincronizados
+        # Sistema de gestos sincronizados integrado com biblioteca completa G1
+        from ..actions.g1_movement_mapping import G1MovementLibrary, G1MovementType
+        self.movement_library = G1MovementLibrary
+        self.movement_type = G1MovementType
+        
         self.gesture_mapping = {
-            "greeting": ["wave", "smile"],
-            "pointing": ["point", "focus"],
-            "explanation": ["gesture_open", "calm"],
-            "thinking": ["hand_to_chin", "thoughtful"],
-            "excitement": ["raised_arms", "happy"],
-            "confusion": ["head_scratch", "confused"],
-            "agreement": ["nod", "positive"],
-            "disagreement": ["head_shake", "negative"]
+            # GESTOS DE SAUDAÇÃO
+            "greeting": [26, 18],  # wave_above_head + high_five_opt
+            "farewell": [25, 11],  # wave_under_head + blow_kiss_with_both_hands_50hz
+            "welcome": [19, 27],   # hug_opt + shake_hand_opt
+            
+            # GESTOS DE COMUNICAÇÃO
+            "pointing": [31],      # extend_right_arm_forward
+            "explanation": [35, 15], # emphasize + both_hands_up
+            "thinking": [32],      # right_hand_on_mouth
+            "agreement": [15, 17], # both_hands_up + clamp
+            "disagreement": [22],  # refuse
+            "attention": [31, 35], # extend_right_arm_forward + emphasize
+            
+            # GESTOS EMOCIONAIS
+            "excitement": [15, 24], # both_hands_up + ultraman_ray
+            "love": [33, 13],      # right_hand_on_heart + blow_kiss_with_right_hand
+            "celebration": [15, 24], # both_hands_up + ultraman_ray
+            "confusion": [32, 22], # right_hand_on_mouth + refuse
+            "surprise": [23, 15],  # right_hand_up + both_hands_up
+            
+            # GESTOS ESPECÍFICOS
+            "applause": [17],      # clamp
+            "kiss": [13],         # blow_kiss_with_right_hand
+            "heart": [33],        # right_hand_on_heart
+            "reject": [22],       # refuse
+            "wave": [26],         # wave_above_head
+            "relax": [99],        # release_arm
+            
+            # MOVIMENTOS DE LOCOMOÇÃO BÁSICOS
+            "move_forward": ["move_forward"],
+            "move_backward": ["move_backward"], 
+            "move_left": ["move_left"],
+            "move_right": ["move_right"],
+            "turn_left": ["rotate_left_medium"],
+            "turn_right": ["rotate_right_medium"],
+            "stop": ["stop_movement"],
+            
+            # PADRÕES COMPLEXOS
+            "dance": ["circular_movement"],
+            "spin": ["rotate_left_fast", "rotate_right_fast"],
+            "balance": ["balance_mode_1"]
         }
         
         # Contexto visual
@@ -603,20 +640,64 @@ class ConversationEngine:
                 )
                 tasks.append(self._execute_action("G1Emotion", emotion_request))
             
-            # 2. Executar gestos
-            if response.gestures and "G1Arms" in self.action_plugins:
+            # 2. Executar gestos e movimentos
+            if response.gestures:
                 for gesture in response.gestures:
-                    gesture_request = ActionRequest(
-                        action_type="arms",
-                        action_name="gesture",
-                        timestamp=datetime.now(),
-                        data={
-                            "gesture": gesture,
-                            "speed": 0.8,
-                            "hold_time": 2.0
-                        }
-                    )
-                    tasks.append(self._execute_action("G1Arms", gesture_request))
+                    # Verificar se é um ID numérico (APENAS movimentos de braços, NÃO estados FSM)
+                    if isinstance(gesture, int):
+                        if "G1Arms" in self.action_plugins:
+                            # Verificar se é um movimento de braços válido (não estado FSM)
+                            arm_movement = self.movement_library.get_movement_by_id(gesture)
+                            if (arm_movement and 
+                                arm_movement.movement_type == self.movement_type.ARM_GESTURE):
+                                
+                                gesture_request = ActionRequest(
+                                    action_type="arms",
+                                    action_name="execute_movement",
+                                    timestamp=datetime.now(),
+                                    data={
+                                        "movement_id": gesture,
+                                        "movement_name": arm_movement.name,
+                                        "duration": arm_movement.duration,
+                                        "requires_relax": arm_movement.requires_relax
+                                    }
+                                )
+                                tasks.append(self._execute_action("G1Arms", gesture_request))
+                            else:
+                                self.logger.warning(f"Ignorando estado FSM {gesture} em contexto conversacional")
+                    
+                    # Verificar se é um comando de locomoção (string) - APENAS locomoção, NÃO estados FSM
+                    elif isinstance(gesture, str):
+                        if "G1Movement" in self.action_plugins:
+                            locomotion = self.movement_library.get_movement_by_name(gesture)
+                            if (locomotion and 
+                                locomotion.movement_type == self.movement_type.LOCOMOTION):
+                                
+                                locomotion_request = ActionRequest(
+                                    action_type="movement",
+                                    action_name="execute_locomotion",
+                                    timestamp=datetime.now(),
+                                    data={
+                                        "command": gesture,
+                                        "movement_name": locomotion.name,
+                                        "duration": locomotion.duration
+                                    }
+                                )
+                                tasks.append(self._execute_action("G1Movement", locomotion_request))
+                        
+                        # Fallback para gestos legados
+                        elif "G1Arms" in self.action_plugins:
+                            gesture_request = ActionRequest(
+                                action_type="arms",
+                                action_name="gesture",
+                                timestamp=datetime.now(),
+                                data={
+                                    "gesture": gesture,
+                                    "speed": 0.8,
+                                    "hold_time": 2.0
+                                }
+                            )
+                            tasks.append(self._execute_action("G1Arms", gesture_request))
             
             # 3. Reproduzir áudio
             if response.audio_cues and "G1Audio" in self.action_plugins:
