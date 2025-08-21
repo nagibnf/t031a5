@@ -13,9 +13,9 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 
 # Imports para visão computacional
+import numpy as np  # Sempre importar numpy
 try:
     import cv2
-    import numpy as np
     from PIL import Image
     CV_AVAILABLE = True
 except ImportError:
