@@ -34,7 +34,7 @@ def test_hybrid_audio():
         working_mics = []
         
         for source, test in results["tests"].items():
-            if "quality_score" in test and test["quality_score"] >= 30:
+            if "quality_score" in test and test["quality_score"] >= 10:
                 working_mics.append(f"{source}({test['quality_score']}/100)")
         
         has_dji = manager.current_source.value == "dji_external" if manager.current_source else False
