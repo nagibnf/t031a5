@@ -231,11 +231,11 @@ Para comunicação com o G1, configure a interface de rede:
 
 ```bash
 # Configure IP estático (exemplo)
-sudo ip addr add 192.168.123.100/24 dev en0
-sudo ip route add 192.168.123.0/24 dev en0
+sudo ip addr add 192.168.123.100/24 dev eth0
+sudo ip route add 192.168.123.0/24 dev eth0
 
 # Ou configure no arquivo de configuração
-# "unitree_ethernet": "en0"
+# "unitree_ethernet": "eth0"
 ```
 
 ### Configuração de Áudio

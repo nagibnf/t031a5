@@ -76,7 +76,7 @@ pip install unitree-sdk2py
 ### **Configuração de Rede**
 ```bash
 # Para testes com G1 real
-sudo ifconfig en0 192.168.123.100 netmask 255.255.255.0
+sudo ifconfig eth0 192.168.123.100 netmask 255.255.255.0
 ```
 
 ## 📈 Métricas de Teste

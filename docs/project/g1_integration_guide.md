@@ -33,7 +33,7 @@ python -c "import unitree_sdk2py; print('SDK instalado com sucesso')"
 2. Configure o IP do computador:
    ```bash
    # macOS/Linux
-   sudo ifconfig en0 192.168.123.100 netmask 255.255.255.0
+   sudo ifconfig eth0 192.168.123.100 netmask 255.255.255.0
    
    # Windows
    netsh interface ip set address "Ethernet" static 192.168.123.100 255.255.255.0
@@ -216,7 +216,7 @@ ping 192.168.123.161
 telnet 192.168.123.161 8080
 
 # Verificar rede
-ifconfig en0
+ifconfig eth0
 ```
 
 #### 3. G1 não responde

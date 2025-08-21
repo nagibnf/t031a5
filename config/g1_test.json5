@@ -396,7 +396,7 @@
     "interface": {
       "robot_ip": "192.168.123.161",
       "robot_port": 8080,
-      "interface": "en11",
+      "interface": "eth0",
       "timeout": 5.0,
       "safety_mode": "normal",
       "emergency_stop": true,

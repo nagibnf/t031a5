@@ -43,7 +43,7 @@ ping 192.168.123.161
 # Testar conectividade com SDK
 python -c "
 from unitree_sdk2py.core.channel import ChannelFactoryInitialize
-ChannelFactoryInitialize(0, 'en0')  # ou sua interface de rede
+ChannelFactoryInitialize(0, 'eth0')  # interface de rede oficial
 print('✅ Conectividade OK')
 "
 ```

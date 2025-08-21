@@ -216,7 +216,7 @@ O arquivo `test_g1_locomotion_rotation.py` implementa:
 # 1. Ativar ambiente virtual
 source venv/bin/activate
 
-# 2. Conectar ao G1 (interface en11)
+# 2. Conectar ao G1 (interface eth0)
 # Verificar conexão de rede
 
 # 3. Executar teste
