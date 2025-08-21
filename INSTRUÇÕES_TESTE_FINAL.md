@@ -1,17 +1,18 @@
 # 🤖 INSTRUÇÕES PARA TESTE FINAL - SISTEMA CONVERSAÇÃO REAL
 
-## 🎯 **SISTEMA IMPLEMENTADO COM SUCESSO!**
+## 🎯 **SISTEMA COMPLETAMENTE IMPLEMENTADO E ATUALIZADO!**
 
 ✅ **Componentes Funcionais:**
-- 🎤 **STT Real:** Google Speech API configurado e funcionando
+- 🎤 **STT Real:** Google Speech API configurado e funcionando  
 - 🤖 **LLM:** Sistema de IA conversacional com personalidade Tobias
-- 🔊 **TTS:** gTTS (Google Text-to-Speech) como backup funcional
+- 🔊 **TTS:** ElevenLabs (config robô) + gTTS backup + Pyttsx3 fallbacks
 - 🎧 **Áudio:** DJI Mic 2 captura + Anker Bluetooth reprodução (100% validado)
-- 🦾 **G1:** Movimentos físicos sincronizados (opcional)
+- 🦾 **G1:** Movimentos físicos sincronizados com fala (IMPLEMENTADO!)
+- ⚙️ **Config:** Carregamento automático das configurações do robô
 
 ## 🚀 **COMO TESTAR O SISTEMA:**
 
-### **1. Teste Conversacional Interativo (RECOMENDADO)**
+### **1. Teste Conversacional Interativo - ARQUIVO ÚNICO (RECOMENDADO)**
 ```bash
 ssh unitree@192.168.123.164
 cd t031a5
@@ -20,13 +21,15 @@ python3 teste_conversacao_interativa.py
 ```
 
 **📋 O que o sistema fará:**
-1. ⏰ Contagem regressiva antes da captura
-2. 🎤 Captura 5s de áudio do DJI Mic
-3. 📊 Análise de qualidade (aguarda fala real)
-4. 🗣️ Google Speech API → texto
-5. 🤖 LLM → resposta inteligente
-6. 🔊 gTTS → síntese de voz
-7. 📢 Reprodução via Anker Bluetooth
+1. 🔧 Inicializar G1 SDK para movimentos físicos
+2. ⏰ Contagem regressiva antes da captura
+3. 🎤 Captura 5s de áudio do DJI Mic (formato nativo)
+4. 📊 Análise de qualidade (aguarda fala real)
+5. 🗣️ Google Speech API → texto em português
+6. 🤖 LLM → resposta inteligente + análise movimento
+7. 🔊 ElevenLabs TTS (config robô) → síntese premium OU gTTS backup
+8. 🎭 **MOVIMENTO + FALA SINCRONIZADOS:** G1 executa gesto enquanto fala
+9. 📢 Reprodução via Anker Bluetooth
 
 ### **2. Sistema Completo com Movimentos G1**
 ```bash
@@ -68,13 +71,31 @@ python3 sistema_conversacao_real_completo.py
 - Verificar Anker ligada e conectada
 - Executar `teste_som_anker_simples.py` primeiro
 
-## 📈 **PRÓXIMAS MELHORIAS:**
+## 🆕 **MELHORIAS IMPLEMENTADAS:**
 
-### **🔑 APIs Adicionais (Opcionais):**
+### **✅ ElevenLabs com Config do Robô:**
+- 🎛️ Voice ID automático: `21m00Tcm4TlvDq8ikWAM` (do arquivo `config/g1_tts.json5`)
+- 🎚️ Configurações de voz: stability=0.5, similarity=0.5, style=0.0
+- 🔧 Carregamento automático via json5
+
+### **✅ Movimentos G1 Sincronizados:**
+- 🎭 Execução simultânea: fala + movimento físico
+- ⏱️ Duração calculada automaticamente pelo áudio
+- 🔄 Retorno à posição neutra após movimento
+- 🦾 Integração completa com biblioteca de movimentos
+
+### **✅ Arquivo Único de Teste:**
+- 📝 `teste_conversacao_interativa.py` consolidado
+- 🧹 Sem duplicação de arquivos de teste
+- 🎯 Funcionalidade completa em um script
+
+## 📈 **CONFIGURAÇÕES OPCIONAIS:**
+
+### **🔑 Para TTS Premium ElevenLabs:**
 ```bash
 # No arquivo .env, adicionar:
-OPENAI_API_KEY=sk-...          # Para STT Whisper + LLM GPT
-ELEVENLABS_API_KEY=...         # Para TTS premium
+ELEVENLABS_API_KEY=...         # Para TTS premium de alta qualidade
+OPENAI_API_KEY=sk-...          # Para STT Whisper + LLM GPT (opcional)
 ```
 
 ### **🦾 Ollama Local (Opcional):**

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""🤖 Teste de conversação interativa com validação de fala"""
+"""🤖 TESTE SISTEMA CONVERSAÇÃO - ARQUIVO ÚNICO PRINCIPAL
+Teste completo: DJI Mic → Google STT → LLM → ElevenLabs TTS → Anker + G1 Movimentos
+"""
 
 import sys
 import asyncio
@@ -14,9 +16,49 @@ logging.basicConfig(level=logging.ERROR)
 
 print('🤖 TESTE DE CONVERSAÇÃO INTERATIVA')
 print('='*60)
-print('🎯 OBJETIVO: Validar fluxo completo DJI → Google STT → LLM → gTTS → Anker')
+print('🎯 OBJETIVO: Validar fluxo completo DJI → Google STT → LLM → ElevenLabs TTS → Anker + G1')
 print('📋 INSTRUÇÕES: Fale CLARAMENTE no DJI Mic quando solicitado')
 print('='*60)
+
+async def reproduzir_audio_async(audio_mgr, audio_data):
+    """Reproduz áudio de forma assíncrona."""
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(
+        None, 
+        audio_mgr.reproduzir_audio_anker,
+        audio_data
+    )
+
+async def executar_movimento_g1(g1_client, movement_library, movimento, duracao):
+    """Executa movimento G1 com duração específica."""
+    try:
+        # Obter ID da ação
+        action_id = movement_library.get_action_id(movimento)
+        
+        if action_id is not None:
+            print(f'🦾 Movimento físico: {movimento} (ID: {action_id})')
+            
+            # Executar movimento
+            g1_client.ExecuteAction(action_id)
+            
+            # Aguardar duração ou duração do movimento
+            movimento_duracao = movement_library.get_duration(movimento)
+            tempo_espera = min(duracao, movimento_duracao)
+            
+            await asyncio.sleep(tempo_espera)
+            
+            # Retornar à posição neutra se necessário
+            if tempo_espera >= movimento_duracao:
+                release_id = movement_library.get_action_id("release_arm")
+                if release_id:
+                    g1_client.ExecuteAction(release_id)
+                    print('🔄 Retornando à posição neutra')
+            
+        else:
+            print(f'⚠️ Movimento "{movimento}" não encontrado na biblioteca')
+            
+    except Exception as e:
+        print(f'❌ Erro no movimento G1: {e}')
 
 async def aguardar_fala_real(audio_mgr, max_tentativas=5):
     """Aguarda captura de áudio com fala real."""
@@ -58,7 +100,7 @@ async def aguardar_fala_real(audio_mgr, max_tentativas=5):
     return None
 
 async def teste_conversacao_completa():
-    """Teste conversacional completo."""
+    """Teste conversacional completo com G1 movimentos."""
     
     try:
         # Importar e inicializar
@@ -67,6 +109,23 @@ async def teste_conversacao_completa():
         from t031a5.speech.stt_real_manager import STTRealManager
         from t031a5.llm.llm_real_manager import LLMRealManager
         from t031a5.speech.tts_real_manager import TTSRealManager
+        from t031a5.actions.g1_movement_mapping import G1MovementLibrary
+        
+        # Inicializar G1 SDK para movimentos
+        g1_client = None
+        movement_library = None
+        try:
+            from unitree_sdk2py.core.channel import ChannelFactoryInitialize
+            from unitree_sdk2py.g1.arm.g1_arm_action_client import G1ArmActionClient as ArmActionClient
+            
+            ChannelFactoryInitialize(0, "eth0")
+            g1_client = ArmActionClient()
+            g1_client.SetTimeout(10.0)
+            g1_client.Init()
+            movement_library = G1MovementLibrary()
+            print('✅ G1 SDK inicializado para movimentos')
+        except Exception as e:
+            print(f'⚠️ G1 SDK não disponível: {e}')
         
         audio_mgr = AudioManagerDefinitivo(auto_connect_anker=True)
         stt_mgr = STTRealManager()
@@ -131,12 +190,30 @@ async def teste_conversacao_completa():
             
             if audio_resposta is not None:
                 print('📢 Reproduzindo via Anker...')
-                sucesso = audio_mgr.reproduzir_audio_anker(audio_resposta)
                 
-                if sucesso:
-                    print('✅ CICLO CONVERSACIONAL COMPLETO!')
+                # Executar movimento + fala sincronizados
+                duracao_audio = len(audio_resposta) / 16000  # duração em segundos
+                
+                # Iniciar movimento
+                movimento_task = None
+                if g1_client and movement_library:
+                    movimento_task = asyncio.create_task(
+                        executar_movimento_g1(g1_client, movement_library, resposta_llm["movement"], duracao_audio)
+                    )
+                    print(f'🦾 Executando movimento: {resposta_llm["movement"]}')
+                
+                # Reproduzir áudio
+                audio_task = asyncio.create_task(
+                    reproduzir_audio_async(audio_mgr, audio_resposta)
+                )
+                
+                # Aguardar ambos
+                if movimento_task:
+                    await asyncio.gather(audio_task, movimento_task)
                 else:
-                    print('⚠️ Problema na reprodução via Anker')
+                    await audio_task
+                
+                print('✅ CICLO CONVERSACIONAL COMPLETO!')
             else:
                 print('❌ Falha na síntese de voz')
             

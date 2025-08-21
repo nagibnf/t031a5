@@ -68,14 +68,18 @@ class TTSRealManager:
         """
         self.config = config or {}
         
-        # Configurações ElevenLabs
-        self.elevenlabs_voice_id = self.config.get("elevenlabs_voice_id", "pNInz6obpgDQGcFmaJgB")  # Adam voice
-        self.elevenlabs_model = self.config.get("elevenlabs_model", "eleven_multilingual_v2")
+        # Carregar configurações do arquivo de config do robô
+        self._load_robot_config()
         
-        # Configurações de voz
-        self.voice_stability = self.config.get("voice_stability", 0.75)
-        self.voice_similarity = self.config.get("voice_similarity", 0.75)
-        self.voice_style = self.config.get("voice_style", 0.50)
+        # Configurações ElevenLabs (usar config do robô ou fallback)
+        self.elevenlabs_voice_id = self.config.get("elevenlabs_voice_id", self.robot_voice_id)
+        self.elevenlabs_model = self.config.get("elevenlabs_model", self.robot_model_id)
+        
+        # Configurações de voz (usar config do robô ou fallback)
+        self.voice_stability = self.config.get("voice_stability", self.robot_stability)
+        self.voice_similarity = self.config.get("voice_similarity", self.robot_similarity)
+        self.voice_style = self.config.get("voice_style", self.robot_style)
+        self.use_speaker_boost = self.config.get("use_speaker_boost", self.robot_speaker_boost)
         
         # Configurações de áudio
         self.sample_rate = self.config.get("sample_rate", 16000)
@@ -100,6 +104,56 @@ class TTSRealManager:
         logger.info("🔊 TTS Real Manager inicializado")
         self._log_providers_status()
     
+    def _load_robot_config(self):
+        """Carrega configurações do arquivo de config do robô."""
+        try:
+            import json5
+            
+            # Tentar carregar config do robô
+            config_path = Path(__file__).parent.parent.parent.parent / "config" / "g1_tts.json5"
+            
+            if config_path.exists():
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    robot_config = json5.load(f)
+                
+                # Extrair configurações TTS
+                tts_config = robot_config.get("tts", {})
+                voice_settings = tts_config.get("voice_settings", {})
+                
+                # Configurações ElevenLabs do robô
+                self.robot_voice_id = tts_config.get("voice_id", "21m00Tcm4TlvDq8ikWAM")
+                self.robot_model_id = tts_config.get("model_id", "eleven_multilingual_v2")
+                
+                # Configurações de voz do robô
+                self.robot_stability = voice_settings.get("stability", 0.5)
+                self.robot_similarity = voice_settings.get("similarity_boost", 0.5)
+                self.robot_style = voice_settings.get("style", 0.0)
+                self.robot_speaker_boost = voice_settings.get("use_speaker_boost", True)
+                
+                logger.info(f"✅ Config do robô carregado: voice_id={self.robot_voice_id}")
+                
+            else:
+                # Fallback padrão
+                self.robot_voice_id = "21m00Tcm4TlvDq8ikWAM"
+                self.robot_model_id = "eleven_multilingual_v2"
+                self.robot_stability = 0.5
+                self.robot_similarity = 0.5
+                self.robot_style = 0.0
+                self.robot_speaker_boost = True
+                
+                logger.warning("⚠️ Config do robô não encontrado - usando padrões")
+                
+        except Exception as e:
+            # Fallback em caso de erro
+            self.robot_voice_id = "21m00Tcm4TlvDq8ikWAM"
+            self.robot_model_id = "eleven_multilingual_v2"
+            self.robot_stability = 0.5
+            self.robot_similarity = 0.5
+            self.robot_style = 0.0
+            self.robot_speaker_boost = True
+            
+            logger.warning(f"⚠️ Erro carregando config do robô: {e} - usando padrões")
+    
     def _init_elevenlabs(self):
         """Inicializa ElevenLabs API."""
         self.elevenlabs_client = None
@@ -118,16 +172,18 @@ class TTSRealManager:
             # Configurar cliente
             elevenlabs.set_api_key(api_key)
             
-            # Configurar voz
+            # Configurar voz com configurações do robô
             self.elevenlabs_voice = Voice(
                 voice_id=self.elevenlabs_voice_id,
                 settings=VoiceSettings(
                     stability=self.voice_stability,
                     similarity_boost=self.voice_similarity,
                     style=self.voice_style,
-                    use_speaker_boost=True
+                    use_speaker_boost=self.use_speaker_boost
                 )
             )
+            
+            logger.info(f"✅ ElevenLabs configurado com voice_id: {self.elevenlabs_voice_id}")
             
             self.elevenlabs_client = True  # Marcador de configuração
             logger.info("✅ ElevenLabs configurado")
