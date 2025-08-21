@@ -29,11 +29,21 @@ class OpenAIProvider(BaseLLMProvider):
         super().__init__(config)
         
         # Configurações específicas do OpenAI
-        self.api_key = config.get("api_key")
+        import os
+        
+        # Carrega .env se disponível
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass  # dotenv não disponível
+        
+        api_key_env = config.get("api_key_env", "OPENAI_API_KEY")
+        self.api_key = config.get("api_key") or os.getenv(api_key_env)
         self.model = config.get("model", "gpt-4o-mini")
         self.temperature = config.get("temperature", 0.7)
-        self.max_tokens = config.get("max_tokens", 1000)
-        self.timeout = config.get("timeout", 30.0)
+        self.max_tokens = config.get("max_tokens", 150)
+        self.timeout = config.get("timeout", 10.0)
         
         # Configurações de contexto
         self.include_vision = config.get("include_vision", False)
@@ -285,35 +295,30 @@ class OpenAIProvider(BaseLLMProvider):
                 "content": request.system_prompt
             })
         
-        # Conteúdo principal
-        content = request.fused_data.content
+        # Conteúdo principal baseado nos dados fundidos
+        fused_data = request.fused_data.data
+        content = str(fused_data) if fused_data else "Nenhum dado disponível"
         
-        # Adiciona contexto se disponível
-        if request.fused_data.metadata:
+        # Adiciona contexto dos dados fundidos
+        if request.fused_data.data:
             context_parts = []
             
-            # Informações de sensores
-            if self.include_sensors and "sensors" in request.fused_data.metadata:
-                sensors = request.fused_data.metadata["sensors"]
-                if sensors:
-                    context_parts.append(f"Sensores: {json.dumps(sensors, ensure_ascii=False)}")
+            # Adiciona todos os dados fundidos como contexto
+            for key, value in request.fused_data.data.items():
+                if isinstance(value, (dict, list)):
+                    context_parts.append(f"{key}: {json.dumps(value, ensure_ascii=False)}")
+                else:
+                    context_parts.append(f"{key}: {value}")
             
-            # Informações de localização
-            if self.include_location and "gps" in request.fused_data.metadata:
-                gps = request.fused_data.metadata["gps"]
-                if gps:
-                    context_parts.append(f"Localização: {json.dumps(gps, ensure_ascii=False)}")
-            
-            # Estado do robô
-            if self.include_robot_state and "robot_state" in request.fused_data.metadata:
-                state = request.fused_data.metadata["robot_state"]
-                if state:
-                    context_parts.append(f"Estado do robô: {json.dumps(state, ensure_ascii=False)}")
+            # Informações de metadata se disponível
+            if request.fused_data.fusion_metadata:
+                meta_str = json.dumps(request.fused_data.fusion_metadata, ensure_ascii=False)
+                context_parts.append(f"Metadados: {meta_str}")
             
             # Adiciona contexto se houver
             if context_parts:
                 context = "\n".join(context_parts)
-                content = f"Contexto:\n{context}\n\nPergunta:\n{content}"
+                content = f"Contexto atual:\n{context}\n\nUse essas informações para responder de forma natural e conversacional."
         
         # Mensagem do usuário
         messages.append({

@@ -403,11 +403,25 @@ class LLMProvider:
             if self.fallback_provider and self.fallback_provider != self.provider_type:
                 logger.info(f"Tentando provedor de fallback: {self.fallback_provider}")
                 
-                # Cria provedor de fallback
+                # Cria provedor de fallback com configuração específica
                 fallback_config = self.config.copy()
-                fallback_config["provider"] = self.fallback_provider
+                
+                # Configuração específica para Ollama fallback
+                if self.fallback_provider == "ollama":
+                    fallback_config.update({
+                        "base_url": "http://localhost:11434", 
+                        "model": "llama3.1:8b",
+                        "temperature": 0.7,
+                        "max_tokens": 150
+                    })
+                
+                # Cria e usa o fallback provider temporário
+                temp_provider_type = self.provider_type
+                self.provider_type = self.fallback_provider
                 
                 fallback_provider = await self._create_provider()
+                self.provider_type = temp_provider_type  # Restaura original
+                
                 if fallback_provider:
                     await fallback_provider.initialize()
                     response = await fallback_provider.process(fused_data, system_prompt)

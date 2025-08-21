@@ -27,7 +27,7 @@ class OllamaProvider(BaseLLMProvider):
         """
         super().__init__(config)
         
-        # Configurações específicas do Ollama
+        # Configurações específicas do Ollama para fallback
         self.base_url = config.get("base_url", "http://localhost:11434")
         self.model = config.get("model", "llama3.1:8b")
         self.stream = config.get("stream", False)

@@ -101,14 +101,13 @@
   
   // 🤖 LLM - Processamento inteligente
   "llm": {
-    "provider": "ollama",
-    "fallback_provider": "openai",
-    "model": "llama3.1:8b",
+    "provider": "openai",
+    "fallback_provider": "ollama",
+    "model": "gpt-4o-mini",
     "temperature": 0.7,
     "max_tokens": 150,
     "timeout": 10.0,
-    "base_url": "http://localhost:11434",
-    "stream": false
+    "api_key_env": "OPENAI_API_KEY"
   },
   
   // 🎭 ACTIONS - Saídas coordenadas
