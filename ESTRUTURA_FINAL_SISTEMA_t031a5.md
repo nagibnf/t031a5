@@ -14,6 +14,14 @@ t031a5/
 │   ├── run_t031a5.py                  # 🔧 Wrapper de execução
 │   └── README.md                      # 📖 Documentação principal
 │
+├── 🌐 WEBSIM (Interface Debug)
+│   └── websim/
+│       ├── static/                    # Assets CSS + JS
+│       │   ├── style.css              # 🎨 Estilos mobile-first
+│       │   └── websim.js              # ⚡ JavaScript interativo
+│       └── templates/                 # Templates HTML
+│           └── index.html             # 🌐 Interface principal
+│
 ├── ⚙️ CONFIGURAÇÕES
 │   └── config/
 │       ├── g1_production.json5        # ⭐ Config única produção
@@ -211,7 +219,9 @@ t031a5/
 - **❌ speech/** - DELETADO (auxiliares órfãos)
 - **❌ vision/** - DELETADO (auxiliares órfãos)  
 - **❌ audio/** - DELETADO (auxiliares órfãos)
+- **📁 WebSim** - REORGANIZADO (consolidado em websim/)
 - **-15 arquivos** órfãos removidos (~4000 linhas)
+- **-2 pastas soltas** na raiz consolidadas
 - **Zero redundância** restante
 
 ### **🚀 Pronto para:**
