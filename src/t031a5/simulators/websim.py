@@ -25,8 +25,8 @@ class WebSimConfig:
     port: int = 8080
     debug: bool = True
     auto_reload: bool = True
-    static_dir: str = "static"
-    templates_dir: str = "templates"
+    static_dir: str = "websim/static"
+    templates_dir: str = "websim/templates"
     max_connections: int = 10
     update_interval: float = 0.1
     cors_enabled: bool = True
@@ -176,7 +176,7 @@ class WebSim:
         js_file = static_dir / "websim.js"
         if not css_file.exists() or not js_file.exists():
             logger.error(f"Arquivos estáticos oficiais não encontrados em {static_dir}")
-            logger.error("Use os arquivos em static/ (versão mobile-first oficial)")
+            logger.error("Use os arquivos em websim/static/ (versão mobile-first oficial)")
     
     async def _setup_templates(self):
         """Configura templates."""
@@ -189,11 +189,11 @@ class WebSim:
         html_file = templates_dir / "index.html"
         if not html_file.exists():
             logger.error(f"Template oficial não encontrado: {html_file}")
-            logger.error("Use o arquivo em templates/index.html (versão mobile-first oficial)")
+            logger.error("Use o arquivo em websim/templates/index.html (versão mobile-first oficial)")
     
-    # Funções de geração automática removidas - usar arquivos oficiais em static/ e templates/
+    # Funções de geração automática removidas - usar arquivos oficiais em websim/static/ e websim/templates/
     
-    # Função _create_default_templates REMOVIDA - usar templates/index.html oficial
+    # Função _create_default_templates REMOVIDA - usar websim/templates/index.html oficial
     pass
 
     async def _handle_index(self, request):
