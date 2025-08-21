@@ -114,8 +114,6 @@ class InputOrchestrator:
             input_classes = {
                 "G1Voice": self._get_g1_voice_class(),
                 "G1Vision": self._get_g1_vision_class(),
-                "G1Sensors": self._get_g1_sensors_class(),
-                "G1GPS": self._get_g1_gps_class(),
                 "G1State": self._get_g1_state_class(),
             }
             
@@ -142,31 +140,15 @@ class InputOrchestrator:
             return self._create_mock_input_class("G1Voice")
     
     def _get_g1_vision_class(self) -> Type[BaseInput]:
-        """Retorna a classe G1VisionInput."""
+        """Retorna a classe G1VisionInput (Intel RealSense D435i)."""
         try:
-            from ..inputs.plugins.g1_vision import G1VisionInput
+            from ..inputs.plugins.g1_vision_d435i import G1VisionInput
             return G1VisionInput
         except ImportError:
-            logger.warning("G1VisionInput não disponível, usando mock")
+            logger.warning("G1VisionInput D435i não disponível, usando mock")
             return self._create_mock_input_class("G1Vision")
     
-    def _get_g1_sensors_class(self) -> Type[BaseInput]:
-        """Retorna a classe G1SensorsInput."""
-        try:
-            from ..inputs.plugins.g1_sensors import G1SensorsInput
-            return G1SensorsInput
-        except ImportError:
-            logger.warning("G1SensorsInput não disponível, usando mock")
-            return self._create_mock_input_class("G1Sensors")
-    
-    def _get_g1_gps_class(self) -> Type[BaseInput]:
-        """Retorna a classe G1GPSInput."""
-        try:
-            from ..inputs.plugins.g1_gps import G1GPSInput
-            return G1GPSInput
-        except ImportError:
-            logger.warning("G1GPSInput não disponível, usando mock")
-            return self._create_mock_input_class("G1GPS")
+
     
     def _get_g1_state_class(self) -> Type[BaseInput]:
         """Retorna a classe G1StateInput."""

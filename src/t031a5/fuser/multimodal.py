@@ -130,9 +130,7 @@ class MultimodalFuser(BaseFuser):
         """
         modality_mapping = {
             "G1Voice": "audio",
-            "G1Vision": "visual",
-            "G1Sensors": "sensor",
-            "G1GPS": "location",
+            "G1Vision": "visual", 
             "G1State": "state"
         }
         
@@ -331,8 +329,6 @@ class MultimodalFuser(BaseFuser):
         return [
             "G1Voice",
             "G1Vision", 
-            "G1Sensors",
-            "G1GPS",
             "G1State"
         ]
     

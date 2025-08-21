@@ -62,12 +62,14 @@
       "type": "G1Vision", 
       "enabled": true,
       "config": {
-        "camera_device": 0, // Webcam temporária
-        "resolution": [640, 480],
-        "fps": 5, // Análise visual a 5 FPS
+        "camera_device": "realsense", // Intel RealSense D435i
+        "resolution": [848, 480], // D435i native resolution
+        "fps": 15, // D435i high FPS capability
         "analysis_interval": 2.0, // LLaVA a cada 2s
         "enable_face_detection": true,
-        "enable_object_detection": true
+        "enable_object_detection": true,
+        "enable_depth": true, // D435i depth capability
+        "depth_range": [0.1, 10.0] // Depth sensing range in meters
       }
     },
     {
@@ -89,10 +91,10 @@
       "fusion_strategy": "weighted",
       "min_modalities": 1,
       "max_modalities": 3,
-      "modality_weights": {
+              "modality_weights": {
         "audio": 1.0,    // Voz é prioritária
-        "visual": 0.8,   // Visão importante para contexto
-        "state": 0.3     // Estado do robô como apoio
+        "visual": 0.9,   // Visão D435i muito importante para contexto
+        "state": 0.4     // Estado do robô como apoio
       }
     }
   },
