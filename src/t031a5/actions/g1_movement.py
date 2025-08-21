@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from .base import BaseAction, ActionRequest, ActionResult
+from .g1_movement_mapping import G1MovementLibrary, G1MovementType
 
 
 class MovementType(Enum):
@@ -113,6 +114,9 @@ class G1MovementAction(BaseAction):
         self.enable_autonomous_navigation = config.get("enable_autonomous_navigation", True)
         self.path_planning = config.get("path_planning", True)
         self.waypoint_tolerance = config.get("waypoint_tolerance", 0.1)  # metros
+        
+        # Biblioteca de movimentos G1
+        self.movement_library = G1MovementLibrary
         
         # Estado interno
         self.movement_state = MovementState(

@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from .base import BaseAction, ActionRequest, ActionResult
+from .g1_movement_mapping import G1MovementLibrary, G1MovementType
 
 
 class ArmType(Enum):
@@ -118,6 +119,9 @@ class G1ArmsAction(BaseAction):
         # Configurações de precisão
         self.position_tolerance = config.get("position_tolerance", 0.01)  # rad
         self.velocity_tolerance = config.get("velocity_tolerance", 0.1)   # rad/s
+        
+        # Biblioteca de movimentos G1
+        self.movement_library = G1MovementLibrary
         
         # Estado dos braços
         self.left_arm = ArmState(
