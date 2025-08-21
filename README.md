@@ -2,6 +2,10 @@
 
 Sistema de IA multimodal otimizado para o robô humanóide Unitree G1, com funcionalidades confirmadas e testadas.
 
+**🫧 Desenvolvido por Bolha**
+
+---
+
 ## 🎯 Status Atual
 
 **✅ FUNCIONALIDADES CONFIRMADAS:**

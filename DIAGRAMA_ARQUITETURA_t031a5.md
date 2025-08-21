@@ -2,6 +2,10 @@
 
 *Sistema de IA Multimodal para Robô Humanóide G1 Tobias*
 
+**🫧 Desenvolvido por Bolha**
+
+---
+
 ## **📊 ARQUITETURA VISUAL**
 
 ```mermaid

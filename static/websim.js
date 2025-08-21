@@ -1,6 +1,7 @@
 // ======================================
 // G1 Tobias - WebSim Mobile JavaScript  
 // Sistema t031a5 - Interface Responsiva
+// 🫧 Desenvolvido por Bolha
 // ======================================
 
 console.log('🤖 WebSim Mobile carregado!');

@@ -3,6 +3,8 @@
 Setup Automatizado Completo do Robô G1 (Tobias)
 Sistema t031a5 - Configuração Inicial Inteligente
 
+🫧 Desenvolvido por Bolha
+
 Este script configura completamente o robô desde o zero,
 incluindo personalidade, voz, rede, e todas as configurações necessárias.
 """

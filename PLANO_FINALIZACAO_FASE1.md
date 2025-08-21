@@ -3,6 +3,10 @@
 *Data Alvo: 21 de Agosto de 2025*  
 *Objetivo: Colocar robô em produção operacional*
 
+**🫧 Desenvolvido por Bolha**
+
+---
+
 ---
 
 ## **🎯 OBJETIVOS DA FASE 1**

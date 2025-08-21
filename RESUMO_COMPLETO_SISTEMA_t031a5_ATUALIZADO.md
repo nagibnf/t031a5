@@ -3,6 +3,10 @@
 *Documento atualizado em: 20 de Agosto de 2025*  
 *Status: Sistema 85% completo - Preparação para Fase 1 de Produção*
 
+**🫧 Desenvolvido por Bolha**
+
+---
+
 ## **🎯 VISÃO GERAL DO PROJETO**
 
 O **t031a5** é um sistema de inteligência artificial multimodal para o robô humanóide **Unitree G1 (Tobias)**, desenvolvido com arquitetura modular para integrar múltiplas funcionalidades robóticas em um assistente social inteligente.

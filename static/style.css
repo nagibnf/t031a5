@@ -60,6 +60,17 @@ body {
     font-size: 24px;
 }
 
+.bolha-header {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.15) 0%, rgba(42, 82, 152, 0.15) 100%);
+    color: #2a5298;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(42, 82, 152, 0.2);
+    margin-left: 4px;
+}
+
 /* Status de Conexão */
 .connection-status {
     display: flex;
@@ -786,6 +797,28 @@ input[type="range"]::-moz-range-thumb {
     align-items: center;
     font-size: 11px;
     color: #64748b;
+    margin-bottom: 8px;
+}
+
+.footer-credits {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.bolha-signature {
+    font-size: 12px;
+    color: #1e3c72;
+    font-weight: 500;
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.1) 0%, rgba(42, 82, 152, 0.1) 100%);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(30, 60, 114, 0.2);
+    display: inline-block;
+}
+
+.bolha-signature strong {
+    color: #2a5298;
+    font-weight: 600;
 }
 
 /* ==================== RESPONSIVIDADE ==================== */
