@@ -99,16 +99,14 @@
   
   // 🤖 LLM - Processamento inteligente
   "llm": {
-    "primary_provider": "ollama",
+    "provider": "ollama",
     "fallback_provider": "openai",
-    "config": {
-      "model": "llama3.1:8b",
-      "temperature": 0.7,
-      "max_tokens": 150, // Respostas concisas
-      "timeout": 10.0,
-      "enable_streaming": false,
-      "context_window": 2048
-    }
+    "model": "llama3.1:8b",
+    "temperature": 0.7,
+    "max_tokens": 150,
+    "timeout": 10.0,
+    "base_url": "http://localhost:11434",
+    "stream": false
   },
   
   // 🎭 ACTIONS - Saídas coordenadas

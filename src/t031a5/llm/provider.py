@@ -341,7 +341,15 @@ class LLMProvider:
             Provedor de LLM ou None se falhar
         """
         try:
-            if self.provider_type == "openai":
+            if self.provider_type == "ollama":
+                try:
+                    from .providers.ollama_provider import OllamaProvider
+                    return OllamaProvider(self.config)
+                except ImportError:
+                    logger.warning("Ollama provider não disponível, usando mock")
+                    from .providers.mock_provider import MockLLMProvider
+                    return MockLLMProvider(self.config)
+            elif self.provider_type == "openai":
                 try:
                     from .providers.openai_provider import OpenAIProvider
                     return OpenAIProvider(self.config)

@@ -154,7 +154,7 @@ class MockLLMProvider(BaseLLMProvider):
             response = " ".join(response_parts)
             
             # Adiciona informações de debug se em modo desenvolvimento
-            if self.config_manager and self.config_manager.is_development_mode():
+            if self.config.get("debug_mode", False):
                 response += f"\n\n[DEBUG] Dados fundidos: {len(fused_data.data)} campos, Confiança: {fused_data.confidence:.2f}"
             
             return response

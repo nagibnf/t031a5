@@ -98,7 +98,7 @@ class ConfigManager:
             
             return self.config
             
-        except Exception as e:
+        except json5.JSONError as e:
             raise ValueError(f"Erro ao decodificar JSON5: {e}")
         except Exception as e:
             raise ValueError(f"Erro ao carregar configuração: {e}")
@@ -138,11 +138,17 @@ class ConfigManager:
         Returns:
             Lista de configurações de inputs
         """
-        inputs_dict = self._raw_config.get("agent_inputs", {})
-        inputs_list = []
+        agent_inputs = self._raw_config.get("agent_inputs", [])
         
-        for input_name, input_config in inputs_dict.items():
+        # Se agent_inputs é uma lista (formato atual), retorna direto
+        if isinstance(agent_inputs, list):
+            return agent_inputs
+        
+        # Se agent_inputs é um dict (formato antigo), converte para lista  
+        inputs_list = []
+        for input_name, input_config in agent_inputs.items():
             if isinstance(input_config, dict):
+                input_config = input_config.copy()  # Evita modificar original
                 input_config["type"] = input_name
                 inputs_list.append(input_config)
         
@@ -155,11 +161,17 @@ class ConfigManager:
         Returns:
             Lista de configurações de actions
         """
-        actions_dict = self._raw_config.get("agent_actions", {})
-        actions_list = []
+        agent_actions = self._raw_config.get("agent_actions", [])
         
-        for action_name, action_config in actions_dict.items():
+        # Se agent_actions é uma lista (formato atual), retorna direto
+        if isinstance(agent_actions, list):
+            return agent_actions
+        
+        # Se agent_actions é um dict (formato antigo), converte para lista
+        actions_list = []
+        for action_name, action_config in agent_actions.items():
             if isinstance(action_config, dict):
+                action_config = action_config.copy()  # Evita modificar original
                 action_config["name"] = action_name
                 # Converter para formato esperado pelo orchestrator (ex: G1Speech -> g1_speech)
                 connector_name = "g1_" + action_name[2:].lower() if action_name.startswith("G1") else action_name.lower()
