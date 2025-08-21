@@ -117,6 +117,12 @@ OPENAI_API_KEY=sk-...           # Chave OpenAI GPT-4
 # Outras chaves já configuradas
 ```
 
+### **Credenciais**: `credentials/`
+```bash
+# Google Speech-to-Text para G1VoiceInput
+credentials/google_asr.json     # Arquivo JSON do Google Cloud
+```
+
 ---
 
 ## 🛠️ **DESENVOLVIMENTO**
