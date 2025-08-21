@@ -29,7 +29,7 @@ class G1ConfirmedFeaturesTest:
         # Configuração mínima
         self.config = {
             "interface": {
-                "interface": "eth0",
+                "interface": "eth0",  # SEMPRE usar eth0 para comunicação com G1
                 "timeout": 10.0
             },
             "default_volume": 100,

@@ -20,7 +20,7 @@ class G1Config(BaseModel):
     # Configurações básicas
     hertz: int = Field(default=10, ge=1, le=100, description="Frequência de execução do loop principal")
     name: str = Field(default="g1_assistant", description="Nome do assistente")
-    unitree_ethernet: str = Field(default="en0", description="Interface de rede para comunicação com G1")
+    unitree_ethernet: str = Field(default="eth0", description="Interface de rede para comunicação com G1")
     
     # Prompt do sistema
     system_prompt_base: str = Field(

@@ -31,7 +31,7 @@ class G1ConfirmedFeaturesMockTest:
         # Configuração para modo mock
         self.config = {
             "interface": {
-                "interface": "en0",  # Interface que existe
+                "interface": "eth0",  # SEMPRE usar eth0 para comunicação com G1
                 "timeout": 10.0,
                 "mock_mode": True  # Ativa modo mock
             },
