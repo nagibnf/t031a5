@@ -1,0 +1,385 @@
+
+
+--- PÁGINA 4 ---
+
+Total Degrees of Freedom
+Single Leg Degrees of Freedom
+Single Hand Degrees of FreedomSingle Arm Degrees of Freedom
+23~43
+1 (Optional 2 additional waist degrees of freedom)
+7(Dex3 -1)+2 (2 Additional Wrist Degree of Freedom)5
+Dex3 -1
+ Unitree G1 EDU
+
+--- PÁGINA 5 ---
+
+LiDAR Livox -360
+ Depth Camera Intel D435i
+
+
+--- PÁGINA 6 ---
+
+Livox -360
+3D LiDAR
+A sensor that determines the surrounding depth 
+information through a high -speed rotating laser array.
+LiDAR is capable of modeling the surrounding 
+environment, and can perform navigation based on the 
+obtained mapping data. It’s what we called
+“Simultaneous Localization and Mapping( SLAM )”.
+
+--- PÁGINA 7 ---
+
+Depth Camera Intel D435i
+Depth Camera with IMU
+A camera that incorporates an inertial measurement unit 
+(IMU) , a depth sensor, and a color sensor simultaneously. 
+Compared with LiDAR, it can provide more accurate depth 
+information. Moreover, it additionally supplies inertial 
+acceleration data and dual RGB camera for visual fusion 
+processing or robot control .
+
+
+--- PÁGINA 8 ---
+
+MID360+D435i Merged FOV
+
+--- PÁGINA 9 ---
+
+Development Computing Unit （Jetson Orin NX ）
+The development computer is a customized version of the Jetson Orin 
+NX. You can connect to it via the Ethernet port located at the back of 
+the robot's neck . The robot's IP address is 192.168.123.164 .Operation and Control Computing Unit
+The operation and control computing unit does not support secondary 
+development or login. You cannot access this computer ( 192.168.123.161 ) 
+via SSH. However, all DDS commands will be received by this computer 
+and control the body to respond accordingly .
+* Only for EDU version
+Ethernet Switcher 
+
+--- PÁGINA 10 ---
+
+Connection Diagram*
+*Intel Real Sense D435i usually connect to OCCU for EDU
+And connected to nothing for EDU+
+
+
+--- PÁGINA 11 ---
+
+System 
+Architecture 
+Diagram
+
+--- PÁGINA 12 ---
+
+After switching back to 
+the Squatting 
+position through L2 + A from 
+the Main Operation Control , if 
+you want to switch back to 
+the Main Operation 
+Control mode without 
+shutting down the device, you 
+need to enter the damping 
+mode through L2 + B , and then 
+switch back to the Main 
+Operation Control through L2 
++ A.
+
+--- PÁGINA 15 ---
+
+Motion Control Version >= 8.2.0.0
+Firmware >= 1.3.3
+Motion Control Version < 8.2.0.0
+Firmware <= 1.3.0
+
+--- PÁGINA 16 ---
+
+Voice Assistant Service in the Unitree G1
+The GPT model ( firmware version ≥1.3.0 ) has been connected to the G1 device. After connecting to the Internet (Wi -Fi Mode), 
+the voice assistant dialogue mode is opened, and the device can support voice dialogue based on the GPT model (such as 
+chat, action, music playback, etc.).
+Switch 
+Mode with 
+L1+L2Wake up conversation mode Push button conversation mode
+• Use wake -up word “Hello Robot” toactivate 
+the conversation.
+• Multiple rounds of natural dialogue can be 
+conducted after awakening.
+• It is suitable for quiet environments .
+• After 15 seconds timeout for no sound, 
+deactivate listening.• Press “L2+Select” to activate the 
+conversation.
+• No wake word is required , long press the 
+combo to start recording, release to end.
+• It is suitable for crowd environments .
+• Activate anytime you want.
+
+--- PÁGINA 18 ---
+
+DDS Message Middleware
+Unitree employs a customized version of Cyclone DDS
+as the communication and development tool within the 
+switch local area network , which we refer to as the DDS 
+middleware .
+This is a publish -subscribe communication architecture 
+similar to ROS . By utilizing the API calls provided in the 
+SDK, users can operate the robot through direct DDS 
+communication with the motion control computing unit.
+
+--- PÁGINA 19 ---
+
+Build Up Develop Environment
+We recommend to use Ubuntu 20.04.6LTS as the development 
+environment. If your organization blocked form using VMs or dual 
+OS, you can use Windows Subsystem of Linux instead.
+You can also use the Development Computing Unit directly. 
+
+--- PÁGINA 20 ---
+
+Electrical Interface
+Connect your PC to G1
+Connect one end of the network cable to the G1, and the 
+other end to the user's computer. Both RJ45 works.
+Open ethernet settings . Set the IP address of your 
+adapter connected to the G1 as 192.163.123.** . It’s 
+recommended to set as 192.168.123.99 .
+Now you get the access to communicate with Operating 
+and Control Unit (192.168.123.161) and Development 
+Computing Unit (192.168.123.164). Try to ping them in the 
+shell.
+*It would be a bit of complex to connect G1 with WSL. See 
+the relevant document provided by Unitree.
+
+--- PÁGINA 21 ---
+
+…
+$ git clone https://github.com/unitreerobotics/unitree_sdk2.git 
+If you are using the 
+Development Computing Unit 
+for develop. There might be no 
+network connection. You can 
+download/clone the repo on 
+your PC and use SCP to upload.
+PS > scp /path/on/your/PC 
+unitree@192.168.123.164:/
+where/you/want/to/upload
+
+
+--- PÁGINA 22 ---
+
+…
+cd unitree_sdk2/
+mkdir build
+cd build
+cmake ..
+sudo make install
+make
+If you are using the WSL,
+You have to install cmake，
+libeigen3 -dev and build -
+essential first.
+
+
+--- PÁGINA 23 ---
+
+Damp Start Squat Sit
+Stand
+UpZero
+TorqueContinuous
+GaitBalance
+Stand
+MoveStop
+MoveSwitch Move Mode
+High Stand Low Stand
+Fsm Id Fsm ModeBalance
+Mode
+Swing
+HeightStand
+HeightVelocity
+
+--- PÁGINA 24 ---
+
+…
+cd build
+cd bin
+./g1_loco_client --network_interface [interface] 
+--set_velocity “0.5 0 0 1”
+If the AI Sport Service > 8.2.0
+Change the 
+LOCO_SERVICE_NAME in 
+g1_loco_api.hpp from “ loco ” to 
+“sport ” 
+
+
+--- PÁGINA 25 ---
+
+…
+./g1_arm7_sdk_dds_example ethernet interface
+G1 arm7 example for the version of 7 
+degrees of freedom. G1 arm5 example 
+for the version of 5 degrees of freedom.
+
+--- PÁGINA 26 ---
+
+Available selection of loco example
+Parameter Description
+set_swing_height Set the height of the leg lift, unit (m)
+set_stand_heightSet the standing height, unit (m)
+set_velocitySet the movement speed [ vxvyomega duration (optional)]
+high_stand Stand high
+low_stand Stand low
+moveMove at a certain speed [ vxvyomega]
+More function of loco service: https://support.unitree.com/home/en/G1_developer/sport_services_interface
+
+--- PÁGINA 27 ---
+
+• This routine demonstrates controlling the robot's arm 
+extension while using the High Level API.
+• Note: In this mode, due to the lack of hand balance assistance, 
+disturbance resistance is significantly reduced. Please 
+ensure the robot is not subjected to external pushes during 
+the demonstration.
+• The routine provides a simple encapsulation of the interfaces 
+for ease of use.
+• Before running this code, make sure to add this program to 
+the CMakeLists.txt file, and link the necessary libraries. 
+Example:
+add_executable (g1_loco_with_arm_example g1_loco_with_arm_example.cpp)
+target_link_libraries (g1_loco_with_arm_example unitree_sdk2)
+Get example here: https://1drv.ms/f/c/6289d305f8a27b6c/ErwYzIA3boxJkzR6K -Wjd5wBIf -FHa7 -KMGF2P0wmbteAw?e=Tp20kx
+
+--- PÁGINA 28 ---
+
+TTS MakerGet/Set
+VolumePlay 
+StreamPlay Stop
+Led Control
+ASR 
+MessagePlay State Record
+
+--- PÁGINA 29 ---
+
+…
+./g1_arm5_sdk_dds_example ethernet interface
+More function of Vui service: https://support.unitree.com/home/en/G1_developer/VuiClient_Service
+
+
+--- PÁGINA 30 ---
+
+• There’s different way to get the access to the Depth Camera for different models.
+• The depth 
+camera is 
+connected to PC1, 
+which is not able 
+to access.
+• Dissemble the 
+head with four 
+screws under 
+the head, and 
+connect to your 
+device or PC2.EDU EDU+
+• There’s a wire 
+comes from the 
+neck of G1.
+• Connect to your 
+device or PC2.
+
+--- PÁGINA 31 ---
+
+*This is an optional part.
+Motor
+Torque Position Kp(PD) Kd(PD)
+Motor IMUDex3 -1 Inspire FTP Inspire DFX
+Remote Controller
+
+
+--- PÁGINA 32 ---
+
+Before using low level control example, please set the robot into the debugging mode .
+1) Hanging up the robot.
+2) Turning into damped mode with L1+A(Old)/L2+B(New) .
+3) Turning into debug mode with L2+R2 . Then press L2+A to check.
+
+
+--- PÁGINA 33 ---
+
+…
+./g1_ankle_swing_example ethernet interface
+More function of low level service: https://support.unitree.com/home/zh/G1_developer/basic_services_interface
+
+--- PÁGINA 34 ---
+
+Motor*This is an optional part.
+HandTorque Speed Position Kp/Ks
+Hand
+Power System DevicePress Sensor*
+Pressure Temperature
+*This is also an optional part.
+
+--- PÁGINA 35 ---
+
+…
+./g1_dex3_example ethernet interface
+More function of Dex3 -1 service: https://support.unitree.com/home/zh/G1_developer/dexterous_hand
+
+--- PÁGINA 36 ---
+
+Operating  System And Environment
+Q: Will installing other libraries or packages affecting the SDK or base OS?
+A: Installing software won’t affecting the SDK. But please careful about modifying libraries relate to SDK: CycloneDDS ,ROS, ROS2.
+Q:Are there any partitions orservices that we should avoid modifying?
+A: 
+• Do not modify the path below:
+• /unitree/
+• /lib/(Not edit existing files)
+• ~/cyclonedds /
+• ~/cyclonedds_ws /
+• ~/nomachine.sh (Don’t delete this)
+• You can edit
+• ~/unitree_SDK2 (You can upgrade it)
+• // DO NOT USE [SUDO APT UPGRADE] // DO NOT USE [SUDO APT UPGRADE ] // DO NOT USE [SUDO APT UPGRADE] //
+Q: Is there an official image or procedure to restore the G1 system if something breaks?
+A: Yes. You can refer to the document here . And you need to install the additional Wi -Fi driver here (RTL8852BU). Try not damage it, you’ll need 
+NVME reader and must dissemble the robot and take the hard disk out.
+Q: Can we use Docker or containers on the G1 without affecting locomotion or sensor latency?
+A: Yes. There’s docker installed but no container running inside of it, and no relative Unitree component.
+
+--- PÁGINA 37 ---
+
+Audio And Speaker
+Q: Can we play `.wav` or `.mp3` files directly using ` AudioClient ` or any other SDK method?
+A: Yes. Use PlayStream . You can refer to the example g1_audio_client_example.cpp .
+Q: Is it possible to access the G1's microphone to record or perform voice recognition?
+A: Yes. Refer to the thread_mic function in g1_audio_client_example.cpp to record. Subscribe AUDIO_SUBSCRIBE_TOPIC for voice recognition.
+Q: Is text -to-speech support English?
+A: Yes. If the robot is talking something hard to recognize in unknown language when talking English, please contact technica l support to 
+upgrade the Chat GO, Vui Service and Vui Module.
+Model Training And Deployment
+Q: What is the official workflow to train locomotion models (e.g., PPO) and deploy them on the G1?
+A: We recommend Isaac Gym. You can refer to the document here .
+Q: Are there any pretrained models we can run directly and what formats are the models?
+A: Pretrained model for G1, H1 and H1 -2 is here . They are in pytorch format(.pt).
+Q: Can we run inference directly on the G1 with custom models?
+A: Use sim2real to deploy. Please be very careful and make sure the motion won’t hurt anyone and anything by accident.
+
+--- PÁGINA 38 ---
+
+AI, Agents And Containers
+Q: Can we develop our LLM service inside G1 with container?
+A: Yes. Containers won’t affect the DDS and relative Unitree component. If you want to deploy models offline, recommend you u se quantized 
+model and check the system requirements. 
+Q: How does the internal GPT service works? 
+A: It works when the connection mode is Wi -Fi mode, sending API Calls to cloud GPT service. 
+Q: Can we develop the internal GPT service?
+A: Not support for developing, but you can use ASR service for voice recognizing and use your own LLM services.
+Example Scripts
+Q: In debugging mode, will the program still respond high level command?
+A: No. The debugging mode will disable the motion control service. You must reboot the robot to restart the service.
+Q: Is it possible to develop upper limb functionality while maintaining lower body motion control?
+A: Sure. You can develop arms when using loco service to move. 
+Q: Can I use loco service in RL simulation(Isaac Gym)?
+A: No. You can use low -level scripts. High -level scripts requires the close -source control program in PC1.
+Q: After an upgrading, I cannot control the robot with high -level scripts.
+A: If the ai sport service is >= 8.2.0.0, change the LOCO_SERVICE_NAME in g1_loco_api.hpp from “loco” to “sport” .
+`
