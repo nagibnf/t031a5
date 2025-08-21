@@ -58,7 +58,7 @@ t031a5/
 
 #### **3. 🎭 OUTPUTS (Ações):**
 - **G1 Speech** - TTS apenas para alertas de sistema (inglês) ✅
-- **G1 Arms** - Sistema de movimentos (16 gestos confirmados) ✅
+- **G1 Arms** - Sistema de movimentos (20 gestos + 8 FSM + 4 locomoção = 32 movimentos) ✅
 - **G1 Emotion** - LEDs expressivos (10 emoções) com pulsação sincronizada ✅
 - **G1 Movement** - Locomoção, posturas e giros com os pés ✅
 - **G1 Audio** - Áudio via Bluetooth Anker + efeitos contextuais 📋
@@ -86,25 +86,53 @@ client.Init()
 client.ExecuteAction(action_map.get("shake hand"))  # Funciona!
 ```
 
-### **📊 LISTA COMPLETA DE MOVIMENTOS G1 (16 confirmados):**
+### **📊 LISTA COMPLETA DE MOVIMENTOS G1 (20 movimentos + FSM + Locomoção):**
+
+#### **🤚 MOVIMENTOS DE BRAÇOS (20 confirmados):**
 ```
-MOVIMENTO               NOME OFICIAL        ID    DESCRIÇÃO
-"release_arm"       →   "release arm"      99    Relaxar braços (essencial)
-"two_hand_kiss"     →   "two-hand kiss"    11    Beijo com duas mãos
-"left_kiss"         →   "left kiss"        12    Beijo mão esquerda  
-"right_kiss"        →   "right kiss"       13    Beijo mão direita
-"hands_up"          →   "hands up"         15    Mãos para cima
-"clap"              →   "clap"             17    Aplaudir
-"high_five"         →   "high five"        18    Toca aqui
-"hug"               →   "hug"              19    Abraçar
-"heart"             →   "heart"            20    Coração
-"right_heart"       →   "right heart"      21    Coração direito
-"reject"            →   "reject"           22    Recusar/Negar
-"right_hand_up"     →   "right hand up"    23    Mão direita para cima
-"ultraman_ray"      →   "x-ray"            24    Raio do Ultraman
-"face_wave"         →   "face wave"        25    Acenar no rosto
-"high_wave"         →   "high wave"        26    Acenar alto
-"shake_hand"        →   "shake hand"       27    Apertar mão
+ID    NOME REAL                        COMANDO                  DESCRIÇÃO
+1  →  turn_back_wave                →  turn_back_wave         Vira para trás e acena
+11 →  blow_kiss_with_both_hands_50hz →  two_hand_kiss         Beijo com duas mãos
+12 →  blow_kiss_with_left_hand      →  left_kiss             Beijo mão esquerda  
+13 →  blow_kiss_with_right_hand     →  right_kiss            Beijo mão direita
+15 →  both_hands_up                 →  hands_up              Duas mãos para cima
+17 →  clamp                         →  clap                  Aplaudir
+18 →  high_five_opt                 →  high_five             Toca aqui
+19 →  hug_opt                       →  hug                   Abraçar
+22 →  refuse                        →  reject                Recusar/Negar
+23 →  right_hand_up                 →  right_hand_up         Mão direita para cima
+24 →  ultraman_ray                  →  ultraman_ray          Raio do Ultraman
+25 →  wave_under_head               →  face_wave             Acenar abaixo da cabeça
+26 →  wave_above_head               →  high_wave             Acenar acima da cabeça
+27 →  shake_hand_opt                →  shake_hand            Apertar mão
+31 →  extend_right_arm_forward      →  point_forward         Estender braço direito para frente
+32 →  right_hand_on_mouth           →  hand_on_mouth         Mão direita na boca
+33 →  right_hand_on_heart           →  hand_on_heart         Mão direita no coração
+34 →  both_hands_up_deviate_right   →  hands_up_right        Duas mãos para cima desviando direita
+35 →  emphasize                     →  emphasize             Enfatizar
+99 →  release_arm                   →  release_arm           Relaxar braços (ESSENCIAL)
+```
+
+#### **🚶 ESTADOS FSM (Finite State Machine):**
+```
+ID     NOME              DESCRIÇÃO                    USO
+0   →  Zero Torque    →  Torque zero               →  Estado seguro
+1   →  Damping        →  Amortecimento             →  Estado estável
+2   →  Squat          →  Agachar                   →  Postura baixa
+3   →  Seat           →  Sentar                    →  Postura sentada
+4   →  Get Ready      →  Preparar                  →  Estado inicial
+200 →  Start          →  Iniciar                   →  Estado ativo
+702 →  Lie2StandUp    →  Deitar para levantar      →  Transição
+706 →  Squat2StandUp  →  Agachar para levantar     →  Transição
+```
+
+#### **🚶 COMANDOS DE LOCOMOÇÃO:**
+```
+COMANDO      NOME           DESCRIÇÃO              USO
+damp      →  Damping     →  Amortecimento       →  Funciona em qualquer estado
+sit       →  Sit         →  Sentar              →  Postura sentada
+highstand →  High Stand  →  Postura alta        →  Postura ereta
+lowstand  →  Low Stand   →  Postura baixa       →  Postura agachada
 ```
 
 ---

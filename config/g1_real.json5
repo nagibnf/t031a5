@@ -145,14 +145,37 @@
       },
       "mock_mode": false, // USAR HARDWARE REAL
       "confirmed_movements": {
-        "32": "Right Hand on Mouth",
+        "1": "Turn Back Wave",
+        "11": "Two Hand Kiss",
+        "12": "Left Kiss",
+        "13": "Right Kiss",
+        "15": "Hands Up",
+        "17": "Clap",
+        "18": "High Five",
+        "19": "Hug",
+        "22": "Refuse",
+        "23": "Right Hand Up",
+        "24": "Ultraman Ray",
+        "25": "Face Wave",
+        "26": "High Wave",
+        "27": "Shake Hand",
+        "31": "Point Forward",
+        "32": "Hand on Mouth",
+        "33": "Hand on Heart",
+        "34": "Hands Up Right",
+        "35": "Emphasize",
         "99": "Release Arm"
       },
       "movement_patterns": {
-        "greeting": [32],
-        "farewell": [32],
-        "thinking": [32],
-        "agreement": [32]
+        "greeting": [26, 18],  // High Wave + High Five
+        "farewell": [25, 11],  // Face Wave + Two Hand Kiss
+        "thinking": [32],      // Hand on Mouth
+        "agreement": [15, 17], // Hands Up + Clap
+        "celebration": [15, 24], // Hands Up + Ultraman Ray
+        "love": [33, 13],      // Hand on Heart + Right Kiss
+        "attention": [31, 35], // Point Forward + Emphasize
+        "reject": [22],        // Refuse
+        "welcome": [19, 27]    // Hug + Shake Hand
       }
     },
     "G1Arms": {
@@ -166,9 +189,16 @@
       },
       "mock_mode": false, // USAR HARDWARE REAL
       "gesture_library": {
-        "wave": {"movement_id": 32, "duration": 3.0},
-        "point": {"movement_id": 32, "duration": 2.0},
-        "thumbs_up": {"movement_id": 32, "duration": 2.0}
+        "wave": {"movement_id": 26, "duration": 3.0},
+        "point": {"movement_id": 31, "duration": 2.0},
+        "high_five": {"movement_id": 18, "duration": 2.0},
+        "hug": {"movement_id": 19, "duration": 3.0},
+        "kiss": {"movement_id": 13, "duration": 2.0},
+        "clap": {"movement_id": 17, "duration": 2.0},
+        "heart": {"movement_id": 33, "duration": 2.0},
+        "emphasize": {"movement_id": 35, "duration": 2.0},
+        "hands_up": {"movement_id": 15, "duration": 2.0},
+        "refuse": {"movement_id": 22, "duration": 2.0}
       }
     },
     "G1Audio": {
@@ -361,64 +391,90 @@
           "type": "fsm"
         },
         "2": {
-          "name": "Get Ready",
-          "description": "Preparar - estado inicial",
-          "type": "fsm"
-        },
-        "3": {
           "name": "Squat",
           "description": "Agachar - postura baixa",
           "type": "fsm"
         },
-        "4": {
+        "3": {
           "name": "Seat",
           "description": "Sentar - postura sentada",
           "type": "fsm"
         },
-        "5": {
+        "4": {
+          "name": "Get Ready",
+          "description": "Preparar - estado inicial",
+          "type": "fsm"
+        },
+        "200": {
           "name": "Start",
           "description": "Iniciar - estado ativo",
           "type": "fsm"
         },
-        "6": {
+        "702": {
           "name": "Lie2StandUp",
           "description": "Deitar para levantar - transição",
           "type": "fsm"
         },
-        "7": {
+        "706": {
           "name": "Squat2StandUp",
           "description": "Agachar para levantar - transição",
           "type": "fsm"
         }
       },
+      "locomotion": {
+        "damp": {
+          "name": "Damping",
+          "description": "Amortecimento",
+          "type": "locomotion"
+        },
+        "sit": {
+          "name": "Sit",
+          "description": "Sentar",
+          "type": "locomotion"
+        },
+        "highstand": {
+          "name": "High Stand",
+          "description": "Postura alta",
+          "type": "locomotion"
+        },
+        "lowstand": {
+          "name": "Low Stand",
+          "description": "Postura baixa",
+          "type": "locomotion"
+        }
+      },
       "not_available": {
-        "11": "Kiss (2 mãos) - Erro 3104",
-        "12": "Beijo Esquerda - Erro 3104",
-        "13": "Wave Right - Erro 3104",
-        "14": "Wave Left - Erro 3104",
-        "15": "Clap Hands - Erro 3104",
-        "16": "Point Forward - Erro 3104",
-        "17": "Thumbs Up - Erro 3104",
-        "18": "Thumbs Down - Erro 3104",
-        "19": "Open Palm - Erro 3104",
-        "20": "Fist - Erro 3104",
-        "21": "Dance - Erro 3104",
-        "22": "Bow - Erro 3104",
-        "23": "Salute - Erro 3104",
-        "24": "Hug - Erro 3104",
-        "25": "High Five - Erro 3104",
-        "26": "Fist Bump - Erro 3104",
-        "27": "Peace Sign - Erro 3104",
-        "28": "OK Sign - Erro 3104",
-        "29": "Rock On - Erro 3104",
-        "30": "Phone Call - Erro 3104",
-        "31": "Camera - Erro 3104"
+        "10": "Unknown movement - Erro 7402",
+        "14": "Unknown movement - Erro 7402",
+        "16": "Unknown movement - Erro 7402",
+        "20": "Unknown movement - Erro 7402",
+        "21": "Unknown movement - Erro 7402",
+        "28": "Unknown movement - Erro 7402",
+        "29": "Unknown movement - Erro 7402",
+        "30": "Unknown movement - Erro 7402",
+        "36": "Unknown movement - Erro 7402",
+        "37": "Unknown movement - Erro 7402",
+        "38": "Unknown movement - Erro 7402",
+        "39": "Unknown movement - Erro 7402",
+        "40": "Unknown movement - Erro 7402",
+        "41": "Unknown movement - Erro 7402",
+        "42": "Unknown movement - Erro 7402",
+        "43": "Unknown movement - Erro 7402",
+        "44": "Unknown movement - Erro 7402",
+        "45": "Unknown movement - Erro 7402",
+        "46": "Unknown movement - Erro 7402",
+        "47": "Unknown movement - Erro 7402",
+        "48": "Unknown movement - Erro 7402",
+        "49": "Unknown movement - Erro 7402",
+        "50": "Unknown movement - Erro 7402"
       },
       "statistics": {
-        "total_tested": 50,
-        "working": 12,
-        "not_working": 38,
-        "success_rate": "24%"
+        "total_tested": 43,
+        "arm_movements": 20,
+        "fsm_states": 8,
+        "locomotion_commands": 4,
+        "not_working": 23,
+        "success_rate": "47%"
       }
     },
     "leds": {
