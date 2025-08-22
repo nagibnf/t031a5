@@ -101,7 +101,7 @@ class G1VisionInput(BaseInput):
         
     async def _initialize(self) -> bool:
         """
-        Inicialização específica do G1VisionInput.
+        Inicialização específica do G1VisionInput - MÉTODO TESTADO.
         
         Returns:
             True se a inicialização foi bem-sucedida
@@ -112,37 +112,37 @@ class G1VisionInput(BaseInput):
             if not REALSENSE_AVAILABLE:
                 self.logger.warning("Intel RealSense D435i não disponível, usando modo mock")
                 self.mock_mode = True
+                self.vision_capture = None
                 return True
             
-            # Configura pipeline RealSense
-            self.pipeline = rs.pipeline()
-            config = rs.config()
+            # Usar VisionCaptureConnector com configurações testadas
+            from ...connectors.vision_capture import VisionCaptureConnector
+            self.vision_capture = VisionCaptureConnector({
+                "width": 640,           # Resolução testada
+                "height": 480,          # Resolução testada  
+                "fps": 30,              # FPS testado
+                "enabled": True,
+                "output_dir": "vision/captures"
+            })
             
-            # Configura streams RGB e Depth com configurações testadas
-            # Usar configuração básica VGA que funcionou no teste
-            config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+            # Inicializar RealSense com método testado
+            success = await self.vision_capture.initialize_realsense()
             
-            if self.enable_depth:
-                config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-                # Align depth to color
-                self.align = rs.align(rs.stream.color)
-            
-            self.logger.info(f"Configurando RealSense: 640x480 @ 30fps")
-            
-            # Inicia pipeline
-            self.profile = self.pipeline.start(config)
-            
-            # Aquece a câmera
-            for _ in range(30):
-                self.pipeline.wait_for_frames()
-            
-            self.logger.info("Intel RealSense D435i inicializada com sucesso")
-            return True
+            if success:
+                self.logger.info("✅ Intel RealSense D435i inicializada com método testado")
+                self.mock_mode = False
+                return True
+            else:
+                self.logger.warning("Falha na inicialização, usando modo mock")
+                self.mock_mode = True
+                self.vision_capture = None
+                return True
             
         except Exception as e:
             self.logger.error(f"Erro na inicialização do D435i: {e}")
             self.logger.warning("Usando modo mock para desenvolvimento")
             self.mock_mode = True
+            self.vision_capture = None
             return True
     
     async def _get_data(self) -> Optional[InputData]:
@@ -158,24 +158,20 @@ class G1VisionInput(BaseInput):
             if self.mock_mode:
                 return await self._get_mock_data()
             
-            # Captura frame
-            frames = self.pipeline.wait_for_frames()
-            
-            if self.enable_depth and self.align:
-                # Alinha depth com color
-                aligned_frames = self.align.process(frames)
-                color_frame = aligned_frames.get_color_frame()
-                depth_frame = aligned_frames.get_depth_frame()
-            else:
-                color_frame = frames.get_color_frame()
-                depth_frame = None
-            
-            if not color_frame:
+            # Usar VisionCaptureConnector testado
+            if not self.vision_capture:
+                self.logger.warning("VisionCaptureConnector não inicializado")
                 return None
             
-            # Converte para numpy array
-            color_image = np.asanyarray(color_frame.get_data())
-            depth_image = np.asanyarray(depth_frame.get_data()) if depth_frame else None
+            # Capturar frame com método testado
+            frame_data = await self.vision_capture.capture_frame_realsense()
+            
+            if not frame_data:
+                return None
+            
+            # Extrair imagens (método testado funcionando)
+            color_image = frame_data["color_image"]
+            depth_image = frame_data["depth_image"]
             
             self.frame_count += 1
             
