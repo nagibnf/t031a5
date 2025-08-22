@@ -8,6 +8,7 @@ import sys
 import subprocess
 import logging
 from pathlib import Path
+from typing import Tuple
 
 # Adiciona src ao path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -66,7 +67,7 @@ class VerificadorEstadoG1:
             except:
                 return False
     
-    def verificar_modo_control(self) -> tuple[bool, str]:
+    def verificar_modo_control(self) -> Tuple[bool, str]:
         """Verifica se G1 está em modo CONTROL."""
         logger.info("🤖 Verificando modo CONTROL do G1...")
         
