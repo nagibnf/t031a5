@@ -41,5 +41,6 @@ __all__ = [
     "AudioCaptureConnector", 
     "VisionCaptureConnector",
     "G1NetworkConnector",
-    "G1ArmsRealConnector"
+    "G1ArmsRealConnector",
+    "G1MovementRealConnector"
 ]

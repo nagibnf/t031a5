@@ -20,6 +20,7 @@ from enum import Enum
 
 from .base import BaseAction, ActionRequest, ActionResult
 from .g1_movement_mapping import G1MovementLibrary, G1MovementType
+from ..connectors.g1_movement_real import G1MovementRealConnector
 
 
 class MovementType(Enum):
