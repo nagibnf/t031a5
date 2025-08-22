@@ -653,7 +653,7 @@ class ConversationEngine:
             tasks = []
             
             # 1. Configurar emoção
-            if "G1Emotion" in self.action_plugins:
+            if "emotion" in self.action_plugins:
                 emotion_request = ActionRequest(
                     action_type="emotion",
                     action_name="set_emotion",
@@ -664,14 +664,14 @@ class ConversationEngine:
                         "duration": len(response.text) * 0.1  # Duração baseada no texto
                     }
                 )
-                tasks.append(self._execute_action("G1Emotion", emotion_request))
+                tasks.append(self._execute_action("emotion", emotion_request))
             
             # 2. Executar gestos e movimentos
             if response.gestures:
                 for gesture in response.gestures:
                     # Verificar se é um ID numérico (APENAS movimentos de braços, NÃO estados FSM)
                     if isinstance(gesture, int):
-                        if "G1Arms" in self.action_plugins:
+                        if "gesture" in self.action_plugins:
                             # Verificar se é um movimento de braços válido (não estado FSM)
                             arm_movement = self.movement_library.get_movement_by_id(gesture)
                             if (arm_movement and 
@@ -688,13 +688,13 @@ class ConversationEngine:
                                         "requires_relax": arm_movement.requires_relax
                                     }
                                 )
-                                tasks.append(self._execute_action("G1Arms", gesture_request))
+                                tasks.append(self._execute_action("gesture", gesture_request))
                             else:
                                 self.logger.warning(f"Ignorando estado FSM {gesture} em contexto conversacional")
                     
                     # Verificar se é um comando de locomoção (string) - APENAS locomoção, NÃO estados FSM
                     elif isinstance(gesture, str):
-                        if "G1Movement" in self.action_plugins:
+                        if "move" in self.action_plugins:
                             locomotion = self.movement_library.get_movement_by_name(gesture)
                             if (locomotion and 
                                 locomotion.movement_type == self.movement_type.LOCOMOTION):
@@ -709,10 +709,10 @@ class ConversationEngine:
                                         "duration": locomotion.duration
                                     }
                                 )
-                                tasks.append(self._execute_action("G1Movement", locomotion_request))
+                                tasks.append(self._execute_action("move", locomotion_request))
                         
                         # Fallback para gestos legados
-                        elif "G1Arms" in self.action_plugins:
+                        elif "gesture" in self.action_plugins:
                             gesture_request = ActionRequest(
                                 action_type="arms",
                                 action_name="gesture",
@@ -723,7 +723,7 @@ class ConversationEngine:
                                     "hold_time": 2.0
                                 }
                             )
-                            tasks.append(self._execute_action("G1Arms", gesture_request))
+                            tasks.append(self._execute_action("gesture", gesture_request))
             
             # 3. Reproduzir áudio
             if response.audio_cues and "G1Audio" in self.action_plugins:
@@ -740,7 +740,7 @@ class ConversationEngine:
                     tasks.append(self._execute_action("G1Audio", audio_request))
             
             # 4. Falar
-            if "G1Speech" in self.action_plugins:
+            if "speak" in self.action_plugins:
                 speech_request = ActionRequest(
                     action_type="speech",
                     action_name="speak",
@@ -752,10 +752,10 @@ class ConversationEngine:
                         "volume": 0.8
                     }
                 )
-                tasks.append(self._execute_action("G1Speech", speech_request))
+                tasks.append(self._execute_action("speak", speech_request))
             
             # 5. Ajustar olhar
-            if response.look_at and "G1Movement" in self.action_plugins:
+            if response.look_at and "move" in self.action_plugins:
                 look_request = ActionRequest(
                     action_type="movement",
                     action_name="look_at",
@@ -766,7 +766,7 @@ class ConversationEngine:
                         "speed": 0.5
                     }
                 )
-                tasks.append(self._execute_action("G1Movement", look_request))
+                tasks.append(self._execute_action("move", look_request))
             
             # Executar todas as ações
             self.state = ConversationState.SPEAKING
