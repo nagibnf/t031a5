@@ -16,6 +16,7 @@ from .audio_capture import AudioCaptureConnector
 from .vision_capture import VisionCaptureConnector
 from .g1_network import G1NetworkConnector
 from .g1_arms_real import G1ArmsRealConnector
+from .g1_movement_real import G1MovementRealConnector
 
 __all__ = [
     # Conectores nativos G1
