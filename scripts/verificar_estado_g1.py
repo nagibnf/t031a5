@@ -28,18 +28,26 @@ class VerificadorEstadoG1:
         }
     
     def verificar_conectividade(self) -> bool:
-        """Verifica se G1 está respondendo na rede."""
+        """Verifica se G1 está respondendo na rede - MÉTODO TESTADO."""
         logger.info("🌐 Verificando conectividade G1...")
         
         try:
-            result = subprocess.run(
-                ["ping", "-c", "3", self.g1_ip], 
-                capture_output=True, 
-                timeout=10
-            )
+            # Usar G1NetworkConnector testado
+            from t031a5.connectors.g1_network import G1NetworkConnector
             
-            if result.returncode == 0:
-                logger.info(f"✅ G1 respondendo em {self.g1_ip}")
+            network = G1NetworkConnector({
+                "g1_ip": self.g1_ip,
+                "jetson_ip": "192.168.123.164",
+                "interface": "eth0",
+                "enabled": True
+            })
+            
+            # Teste rápido de conectividade (método testado)
+            import asyncio
+            success = asyncio.run(network.quick_ping())
+            
+            if success:
+                logger.info(f"✅ G1 respondendo em {self.g1_ip} (método testado)")
                 return True
             else:
                 logger.error(f"❌ G1 não responde em {self.g1_ip}")
@@ -47,7 +55,16 @@ class VerificadorEstadoG1:
                 
         except Exception as e:
             logger.error(f"❌ Erro na conectividade: {e}")
-            return False
+            # Fallback para ping manual
+            try:
+                result = subprocess.run(
+                    ["ping", "-c", "1", self.g1_ip], 
+                    capture_output=True, 
+                    timeout=5
+                )
+                return result.returncode == 0
+            except:
+                return False
     
     def verificar_modo_control(self) -> tuple[bool, str]:
         """Verifica se G1 está em modo CONTROL."""
