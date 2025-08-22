@@ -157,50 +157,141 @@ class G1VoiceInput(BaseInput):
             return None
 
     async def _capture_real_audio(self) -> Optional[Dict[str, Any]]:
-        """Captura áudio real do DJI Mic 2 - MÉTODO TESTADO"""
+        """Captura áudio real do DJI Mic 2 com Google STT gRPC streaming"""
         try:
             if self.is_capturing:
                 return None  # Já está capturando
             
             self.is_capturing = True
             
-            # Usar AudioCaptureConnector testado
-            if self.audio_capture:
-                success, audio_file, file_size = await self.audio_capture.capture_audio_dji_mic(
-                    duration=self.capture_duration
-                )
+            # Usar streaming STT via gRPC (MÉTODO REAL-TIME)
+            text_result = await self._stream_stt_grpc()
+            
+            if text_result:
+                voice_data = {
+                    "text": text_result["transcript"],
+                    "confidence": text_result["confidence"],
+                    "language": self.language,
+                    "timestamp": datetime.now().isoformat(),
+                    "is_speech": True,
+                    "audio_level": 0.8,
+                    "method": "dji_mic_google_stt_grpc_streaming",
+                    "is_final": text_result["is_final"]
+                }
                 
-                if success and file_size > 1000:  # Arquivo com conteúdo real
-                    # Por enquanto, simular STT - futuramente integrar Google Speech API
-                    voice_data = {
-                        "text": "Audio capturado do DJI Mic",  # Placeholder
-                        "confidence": 0.8,
-                        "language": self.language,
-                        "timestamp": datetime.now().isoformat(),
-                        "audio_file": audio_file,
-                        "file_size": file_size,
-                        "duration": self.capture_duration,
-                        "is_speech": True,
-                        "audio_level": 0.7,
-                        "method": "dji_mic_arecord_S24_3LE_48000_TESTADO"
-                    }
-                    
-                    logger.debug(f"✅ Audio capturado com método testado: {file_size} bytes")
-                    return voice_data
-                else:
-                    logger.warning("Audio capturado muito pequeno ou falhou")
-                    if audio_file and os.path.exists(audio_file):
-                        os.remove(audio_file)
-                    return None
+                logger.info(f"🎤 STT gRPC: '{text_result['transcript'][:50]}...' (confidence: {text_result['confidence']:.2f})")
+                return voice_data
             else:
-                logger.error("AudioCaptureConnector não inicializado")
                 return None
                 
         except Exception as e:
-            logger.error(f"Erro na captura de áudio: {e}")
+            logger.error(f"Erro na captura STT gRPC: {e}")
             return None
         finally:
             self.is_capturing = False
+            
+    async def _stream_stt_grpc(self) -> Optional[Dict[str, Any]]:
+        """Streaming STT via Google Speech API gRPC - TEMPO REAL"""
+        try:
+            import pyaudio
+            import queue
+            import threading
+            from google.cloud import speech
+            
+            # Config de áudio para DJI Mic
+            RATE = 16000
+            CHUNK = int(RATE / 10)  # 100ms chunks
+            FORMAT = pyaudio.paInt16
+            CHANNELS = 1
+            
+            # Config Google Speech API
+            client = speech.SpeechClient()
+            config = speech.RecognitionConfig(
+                encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+                sample_rate_hertz=RATE,
+                language_code=self.language,
+                enable_automatic_punctuation=True,
+            )
+            streaming_config = speech.StreamingRecognitionConfig(
+                config=config,
+                interim_results=True,
+            )
+            
+            audio_queue = queue.Queue()
+            stream_active = True
+            
+            def record_audio():
+                """Thread de captura DJI Mic"""
+                audio = pyaudio.PyAudio()
+                stream = audio.open(
+                    format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    frames_per_buffer=CHUNK,
+                )
+                
+                logger.info("🔴 Iniciando captura streaming DJI Mic...")
+                while stream_active:
+                    try:
+                        data = stream.read(CHUNK, exception_on_overflow=False)
+                        audio_queue.put(data)
+                    except Exception as e:
+                        logger.warning(f"Erro captura chunk: {e}")
+                        break
+                
+                stream.stop_stream()
+                stream.close()
+                audio.terminate()
+            
+            def audio_generator():
+                """Gerador de chunks para gRPC"""
+                while stream_active:
+                    try:
+                        chunk = audio_queue.get(timeout=1.0)
+                        yield speech.StreamingRecognizeRequest(audio_content=chunk)
+                    except queue.Empty:
+                        continue
+                    except Exception as e:
+                        logger.warning(f"Erro generator: {e}")
+                        break
+            
+            # Iniciar captura em thread
+            record_thread = threading.Thread(target=record_audio)
+            record_thread.daemon = True
+            record_thread.start()
+            
+            logger.info("🧠 Conectando Google Speech API via gRPC...")
+            
+            # Stream gRPC
+            requests = audio_generator()
+            responses = client.streaming_recognize(streaming_config, requests)
+            
+            logger.info("📝 Streaming STT ativo - fale algo:")
+            
+            # Processar respostas em tempo real
+            for response in responses:
+                for result in response.results:
+                    transcript = result.alternatives[0].transcript
+                    confidence = result.alternatives[0].confidence if result.alternatives[0].confidence else 0.8
+                    
+                    # Mostrar no console em tempo real
+                    if result.is_final:
+                        print(f"[FINAL] {transcript}")
+                        stream_active = False
+                        return {
+                            "transcript": transcript,
+                            "confidence": confidence,
+                            "is_final": True
+                        }
+                    else:
+                        print(f"[TEMP]  {transcript}", end='\r')
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Erro streaming STT gRPC: {e}")
+            return None
     
     async def _health_check(self) -> bool:
         """
