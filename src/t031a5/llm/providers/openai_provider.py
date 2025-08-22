@@ -306,13 +306,16 @@ class OpenAIProvider(BaseLLMProvider):
             # Adiciona todos os dados fundidos como contexto
             for key, value in request.fused_data.data.items():
                 if isinstance(value, (dict, list)):
-                    context_parts.append(f"{key}: {json.dumps(value, ensure_ascii=False)}")
+                    # Converte datetime para string antes de serializar
+                    safe_value = self._make_json_safe(value)
+                    context_parts.append(f"{key}: {json.dumps(safe_value, ensure_ascii=False)}")
                 else:
                     context_parts.append(f"{key}: {value}")
             
             # Informações de metadata se disponível
             if request.fused_data.fusion_metadata:
-                meta_str = json.dumps(request.fused_data.fusion_metadata, ensure_ascii=False)
+                safe_metadata = self._make_json_safe(request.fused_data.fusion_metadata)
+                meta_str = json.dumps(safe_metadata, ensure_ascii=False)
                 context_parts.append(f"Metadados: {meta_str}")
             
             # Adiciona contexto se houver
@@ -322,11 +325,30 @@ class OpenAIProvider(BaseLLMProvider):
         
         # Mensagem do usuário
         messages.append({
-            "role": "user",
+            "role": "user", 
             "content": content
         })
         
         return messages
+    
+    def _make_json_safe(self, obj):
+        """
+        Converte objetos datetime e outros tipos não-serializáveis para JSON-safe.
+        
+        Args:
+            obj: Objeto a ser convertido
+            
+        Returns:
+            Objeto seguro para JSON
+        """
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        elif isinstance(obj, dict):
+            return {k: self._make_json_safe(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [self._make_json_safe(item) for item in obj]
+        else:
+            return obj
     
     async def _check_rate_limit(self) -> bool:
         """

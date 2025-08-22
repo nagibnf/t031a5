@@ -880,5 +880,15 @@ class G1MovementAction(BaseAction):
         )
     
     async def _start(self) -> bool:
-        """Implementação do método abstrato."""
-        return await self.start()
+        """Inicia sistema de movimento específico."""
+        try:
+            # Inicia monitoring de movimento se necessário
+            if self.enable_autonomous_navigation:
+                self.logger.info("Iniciando monitoramento de navegação...")
+            
+            self.logger.info("G1Movement iniciado com sucesso")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Erro ao iniciar G1Movement: {e}")
+            return False

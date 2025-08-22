@@ -40,7 +40,7 @@ class G1VoiceInput(BaseInput):
         # Configurações do DJI Mic 2
         self.dji_device = "hw:0,0"  # DJI MIC MINI é card 0
         self.dji_format = "S24_3LE"  # Formato nativo que funciona
-        self.capture_duration = 2.0  # Segundos por captura
+        self.capture_duration = 2  # Segundos por captura (inteiro)
         
         # Estado
         self.is_capturing = False

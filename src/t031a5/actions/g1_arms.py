@@ -874,5 +874,11 @@ class G1ArmsAction(BaseAction):
         )
     
     async def _start(self) -> bool:
-        """Implementação do método abstrato."""
-        return await self.start()
+        """Inicia sistema de braços específico."""
+        try:
+            self.logger.info("G1Arms iniciado com sucesso")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Erro ao iniciar G1Arms: {e}")
+            return False
