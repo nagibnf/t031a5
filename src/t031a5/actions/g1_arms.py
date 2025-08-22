@@ -20,6 +20,7 @@ from enum import Enum
 
 from .base import BaseAction, ActionRequest, ActionResult
 from .g1_movement_mapping import G1MovementLibrary, G1MovementType
+from ..connectors.g1_arms_real import G1ArmsRealConnector
 
 
 class ArmType(Enum):
@@ -122,6 +123,13 @@ class G1ArmsAction(BaseAction):
         
         # Biblioteca de movimentos G1
         self.movement_library = G1MovementLibrary
+        
+        # G1ArmsRealConnector - MÉTODO VALIDADO (Teste 8)
+        self.g1_arms_real = G1ArmsRealConnector({
+            "enabled": not self.mock_mode,
+            "network_interface": config.get("network_interface", "eth0"),
+            "timeout": config.get("timeout", 10.0)
+        })
         
         # Estado dos braços
         self.left_arm = ArmState(
@@ -359,8 +367,18 @@ class G1ArmsAction(BaseAction):
             )
     
     def _parse_arm_command(self, content: Dict[str, Any]) -> Optional[ArmCommand]:
-        """Parse do comando dos braços."""
+        """Parse do comando dos braços - ATUALIZADO COM GESTOS SDK."""
         try:
+            # Suporte para comando legacy 'movement' (compatibilidade)
+            movement = content.get("movement")
+            if movement:
+                return ArmCommand(
+                    arm_type=ArmType.BOTH,
+                    action="gesture",
+                    gesture_name=movement,
+                    duration=content.get("duration", 3.0)
+                )
+            
             action = content.get("action", "").lower()
             arm_type_str = content.get("arm", "both").lower()
             
@@ -551,10 +569,22 @@ class G1ArmsAction(BaseAction):
             return False
     
     async def _execute_gesture(self, command: ArmCommand) -> bool:
-        """Executa gesto expressivo."""
+        """Executa gesto expressivo - MÉTODO VALIDADO (Teste 8)."""
         try:
             gesture_name = command.gesture_name or "wave"
+            duration = command.duration or 3.0
             
+            if not self.mock_mode and self.g1_arms_real.is_initialized:
+                # USAR SDK REAL - MÉTODO TESTADO E FUNCIONANDO ✅
+                success = await self.g1_arms_real.execute_gesture(gesture_name, duration)
+                if success:
+                    self.logger.info(f"✅ Gesto G1 executado via SDK: {gesture_name}")
+                    return True
+                else:
+                    self.logger.warning(f"Gesto G1 falhou via SDK: {gesture_name}")
+                    return False
+            
+            # Fallback para predefined_gestures se SDK não disponível
             if gesture_name not in self.predefined_gestures:
                 self.logger.warning(f"Gesto não reconhecido: {gesture_name}")
                 return False
