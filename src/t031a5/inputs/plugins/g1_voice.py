@@ -56,31 +56,31 @@ class G1VoiceInput(BaseInput):
             True se a inicialização foi bem-sucedida
         """
         try:
-                    # Verificar se DJI Mic 2 está disponível (MÉTODO TESTADO)
-        logger.info("Verificando DJI Mic 2...")
+            # Verificar se DJI Mic 2 está disponível (MÉTODO TESTADO)
+            logger.info("Verificando DJI Mic 2...")
         
-        # Testar se o dispositivo está disponível
-        proc = subprocess.Popen(['arecord', '-l'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = proc.communicate()
-        
-        if 'DJI MIC MINI' in stdout.decode():
-            logger.info("🎤 DJI MIC MINI detectado - usando hardware real (método testado)")
-            self.mock_mode = False
+            # Testar se o dispositivo está disponível
+            proc = subprocess.Popen(['arecord', '-l'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = proc.communicate()
             
-            # Inicializar conector de captura com configurações testadas
-            from ...connectors.audio_capture import AudioCaptureConnector
-            self.audio_capture = AudioCaptureConnector({
-                "device": "hw:0,0",      # DJI Mic card 0, device 0 (testado)
-                "format": "S24_3LE",    # Formato nativo testado
-                "rate": 48000,          # Taxa nativa testada
-                "channels": 2,          # Estéreo testado
-                "enabled": True
-            })
-        else:
-            logger.warning("DJI MIC MINI não encontrado - usando modo mock")
-            self.mock_mode = True
-            self.audio_capture = None
-            
+            if 'DJI MIC MINI' in stdout.decode():
+                logger.info("🎤 DJI MIC MINI detectado - usando hardware real (método testado)")
+                self.mock_mode = False
+                
+                # Inicializar conector de captura com configurações testadas
+                from ...connectors.audio_capture import AudioCaptureConnector
+                self.audio_capture = AudioCaptureConnector({
+                    "device": "hw:0,0",      # DJI Mic card 0, device 0 (testado)
+                    "format": "S24_3LE",    # Formato nativo testado
+                    "rate": 48000,          # Taxa nativa testada
+                    "channels": 2,          # Estéreo testado
+                    "enabled": True
+                })
+            else:
+                logger.warning("DJI MIC MINI não encontrado - usando modo mock")
+                self.mock_mode = True
+                self.audio_capture = None
+                
             logger.info("G1VoiceInput inicializado com sucesso")
             return True
             
