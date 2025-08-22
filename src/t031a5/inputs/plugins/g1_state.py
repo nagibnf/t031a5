@@ -856,8 +856,9 @@ class G1StateInput(BaseInput):
     async def _start(self) -> bool:
         """Inicia monitoramento de estado específico."""
         try:
-            # Inicia monitoramento contínuo se necessário
-            if self.enable_monitoring:
+            # Inicia monitoramento contínuo se necessário  
+            enable_monitoring = getattr(self, 'enable_monitoring', True)
+            if enable_monitoring:
                 self.logger.info("Iniciando monitoramento contínuo do G1...")
             
             self.logger.info("G1State iniciado com sucesso")
