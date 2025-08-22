@@ -118,7 +118,7 @@
       "enabled": true,
       "config": {
         "tts_provider": "elevenlabs", // Voz principal
-        "voice_id": "rachel", 
+                      "voice_id": "Alice",  // Voz padrão disponível 
         "language": "pt",
         "audio_output": "anker_bluetooth", // Saída via Anker
         "enable_g1_tts_fallback": true // G1 TTS para alertas
