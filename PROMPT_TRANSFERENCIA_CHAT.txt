@@ -1,0 +1,45 @@
+🤖 PROMPT PARA NOVO CHAT - SISTEMA t031a5 G1 TOBIAS
+
+Olá! Você vai assumir o desenvolvimento do sistema conversacional robótico t031a5 com robô Unitree G1 chamado "Tobias". 
+
+O sistema passou por 14 testes extensivos e está 100% FUNCIONAL para operação conversacional com expressões visuais dinâmicas.
+
+CONTEXTO CRÍTICO:
+- Hardware: Unitree G1 (192.168.123.161) + Jetson Orin (192.168.123.164, usuário "unitree")
+- Sistema: DJI Mic + RealSense D435i + Anker Soundcore + ElevenLabs + G1 SDK
+- Status: Sistema áudio-visual dinâmico funcionando (AudioVisualDynamic)
+
+COMPONENTES 100% FUNCIONAIS (7):
+✅ ElevenLabs TTS + Anker Bluetooth (voice="Alice", sink=bluez_sink.F4_2B_7D_2B_D1_B6.a2dp_sink)
+✅ DJI Mic 2 captura real (arecord -D hw:0,0 -f S24_3LE -r 48000 -c 2)
+✅ RealSense D435i + LLaVA visão (640x480@30fps + Ollama local)
+✅ G1 Arms movimentos (G1ArmActionClient.ExecuteAction)
+✅ G1 Movement locomoção (LocoClient: Start→Move→StopMove)
+✅ G1 LEDs emoções (AudioClient.LedControl(R,G,B) via Python3)
+✅ Sistema integrado áudio-visual dinâmico (texto→emoção→TTS→LEDs+volume→Anker)
+
+DESCOBERTAS TÉCNICAS ESSENCIAIS:
+- G1 LEDs: unitree_sdk2py.g1.audio.g1_audio_client + Python3 (não Python2)
+- ElevenLabs: api_key explícito obrigatório, voice_id="Alice"
+- Mapeamento emoções: happy=verde, excited=laranja, thinking=roxo, calm=ciano, etc.
+- Intensidade LED dinâmica por volume áudio (janelas 100ms)
+- REGRA SEGURANÇA: NUNCA Damp() automatizado, apenas manual
+
+ARQUIVOS CHAVE:
+- config/g1_production.json5 (voice_id="Alice")
+- src/t031a5/connectors/ (11 conectores validados)
+- scripts/verificar_estado_g1.py (OBRIGATÓRIO antes qualquer operação G1)
+
+COMANDOS INICIALIZAÇÃO:
+ssh unitree@192.168.123.164
+cd /home/unitree/t031a5
+python3 scripts/verificar_estado_g1.py
+bluetoothctl connect F4:2B:7D:2B:D1:B6  # Se Anker desconectado
+
+SISTEMA CONVERSACIONAL OPERACIONAL:
+from t031a5.connectors.audio_visual_dynamic import AudioVisualDynamic
+system = AudioVisualDynamic({'enabled': True})
+await system.initialize()
+await system.speak_with_dynamic_leds("Texto aqui")  # LEDs mudam cor+intensidade
+
+O sistema está 100% pronto para uso em produção. Que funcionalidade você gostaria de testar ou expandir?
