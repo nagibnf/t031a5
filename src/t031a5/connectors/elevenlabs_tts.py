@@ -137,7 +137,7 @@ class ElevenLabsTTSConnector:
         return None
     
     async def synthesize_speech(self, request: ElevenLabsTTSRequest) -> ElevenLabsTTSResponse:
-        """Sintetiza fala usando ElevenLabs."""
+        """Sintetiza fala usando ElevenLabs - MÉTODO TESTADO."""
         if not self.enabled or not self.api_key:
             return ElevenLabsTTSResponse(
                 success=False,
@@ -145,50 +145,46 @@ class ElevenLabsTTSConnector:
             )
         
         try:
-            # Configurações padrão
-            voice_settings = request.voice_settings or {
-                "stability": 0.5,
-                "similarity_boost": 0.75,
-                "style": 0.0,
-                "use_speaker_boost": True
-            }
+            # MÉTODO TESTADO: Usar biblioteca elevenlabs com API key explícita
+            from elevenlabs import generate, save
             
-            # Parâmetros da requisição
-            params = {
-                "text": request.text,
-                "model_id": request.model_id,
-                "voice_settings": voice_settings,
-                "output_format": request.output_format,
-                "optimize_streaming_latency": request.optimize_streaming_latency
-            }
+            self.logger.info(f"🎤 Gerando TTS: '{request.text[:50]}...' com voz {request.voice_id}")
             
-            headers = {
-                "xi-api-key": self.api_key,
-                "Content-Type": "application/json"
-            }
+            # Gerar áudio com método testado
+            audio = generate(
+                text=request.text,
+                voice=request.voice_id,
+                api_key=self.api_key  # API key explícita necessária (testado)
+            )
             
-            # Faz requisição para síntese
-            url = f"{self.base_url}/text-to-speech/{request.voice_id}"
-            response = requests.post(url, json=params, headers=headers)
-            
-            if response.status_code != 200:
-                return ElevenLabsTTSResponse(
-                    success=False,
-                    error_message=f"Erro na síntese: {response.status_code}"
-                )
-            
-            # Salva arquivo de áudio
+            # Salvar arquivo de áudio
             timestamp = int(asyncio.get_event_loop().time() * 1000)
             filename = f"elevenlabs_{timestamp}.{request.output_format}"
             filepath = self.output_dir / filename
             
-            with open(filepath, "wb") as f:
-                f.write(response.content)
+            # Usar função save da biblioteca (método testado)
+            save(audio, str(filepath))
             
-            # Calcula duração aproximada (baseado no texto)
+            # Verificar se arquivo foi gerado
+            if not filepath.exists():
+                return ElevenLabsTTSResponse(
+                    success=False,
+                    error_message="Arquivo de áudio não foi gerado"
+                )
+            
+            file_size = filepath.stat().st_size
+            
+            # Verificar se arquivo tem conteúdo (método testado)
+            if file_size < 5000:  # Menos de 5KB indica problema
+                return ElevenLabsTTSResponse(
+                    success=False,
+                    error_message=f"Arquivo muito pequeno: {file_size} bytes"
+                )
+            
+            # Calcular duração aproximada (baseado no texto)
             duration = len(request.text.split()) * 0.5  # ~0.5s por palavra
             
-            self.logger.info(f"✅ ElevenLabs TTS: '{request.text[:50]}...' -> {filename}")
+            self.logger.info(f"✅ ElevenLabs TTS gerado: {filename} ({file_size} bytes, método testado)")
             
             return ElevenLabsTTSResponse(
                 success=True,
