@@ -123,6 +123,11 @@ class CortexRuntime:
         await self.fuser.initialize()
         await self.llm_provider.initialize()
         
+        # Inicia componentes (necessário para orchestrators funcionarem)
+        logger.info("Iniciando orchestrators...")
+        await self.input_orchestrator.start()
+        await self.action_orchestrator.start()
+        
         # Inicializa G1Controller se configurado
         await self._initialize_g1_controller()
         
