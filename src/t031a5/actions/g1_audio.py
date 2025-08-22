@@ -153,7 +153,7 @@ class G1AudioAction(BaseAction):
         self.audio_errors = 0
         
         # Simulação para desenvolvimento
-        self.mock_mode = config.get("mock_mode", True)
+        self.mock_mode = config.get("mock_mode", False)  # FORÇAR HARDWARE REAL
         self.simulation_speed = config.get("simulation_speed", 1.0)
         
         # Diretórios de áudio

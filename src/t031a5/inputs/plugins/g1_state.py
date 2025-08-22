@@ -154,7 +154,7 @@ class G1StateInput(BaseInput):
         self.last_update = datetime.now()
         
         # Simulação para desenvolvimento
-        self.mock_mode = config.get("mock_mode", True)
+        self.mock_mode = config.get("mock_mode", False)  # FORÇAR HARDWARE REAL
         self.mock_data_file = config.get("mock_data_file", None)
         
         # Configurações de articulações (baseado no G1 real)

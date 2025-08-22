@@ -159,7 +159,7 @@ class G1ArmsAction(BaseAction):
         self.objects_manipulated = 0
         
         # Simulação para desenvolvimento
-        self.mock_mode = config.get("mock_mode", True)
+        self.mock_mode = config.get("mock_mode", False)  # FORÇAR HARDWARE REAL
         self.simulation_speed = config.get("simulation_speed", 1.0)
         
         # Gestos predefinidos

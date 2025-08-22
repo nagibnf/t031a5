@@ -143,7 +143,7 @@ class G1MovementAction(BaseAction):
         self.average_speed = 0.0
         
         # Simulação para desenvolvimento
-        self.mock_mode = config.get("mock_mode", True)
+        self.mock_mode = config.get("mock_mode", False)  # FORÇAR HARDWARE REAL
         self.simulation_speed = config.get("simulation_speed", 1.0)  # multiplicador de velocidade
         
         # Gestos predefinidos
