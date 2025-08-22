@@ -57,8 +57,6 @@ async def main():
         print("🔧 Inicializando componentes...")
         success = await cortex.initialize()
         
-        print(f"🔍 DEBUG: cortex.initialize() retornou: {success}")
-        
         if not success:
             print("❌ Falha na inicialização")
             return

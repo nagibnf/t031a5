@@ -118,13 +118,16 @@ class G1VisionInput(BaseInput):
             self.pipeline = rs.pipeline()
             config = rs.config()
             
-            # Configura streams RGB e Depth
-            config.enable_stream(rs.stream.color, self.resolution[0], self.resolution[1], rs.format.bgr8, self.fps)
+            # Configura streams RGB e Depth com configurações testadas
+            # Usar configuração básica VGA que funcionou no teste
+            config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
             
             if self.enable_depth:
-                config.enable_stream(rs.stream.depth, self.resolution[0], self.resolution[1], rs.format.z16, self.fps)
+                config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
                 # Align depth to color
                 self.align = rs.align(rs.stream.color)
+            
+            self.logger.info(f"Configurando RealSense: 640x480 @ 30fps")
             
             # Inicia pipeline
             self.profile = self.pipeline.start(config)

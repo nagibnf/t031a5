@@ -186,7 +186,7 @@
   
   // 📊 LOGGING e MÉTRICAS
   "logging": {
-    "level": "DEBUG",
+    "level": "INFO",
     "file": "/tmp/t031a5_production.log",
     "log_format": "simple",
     "enable_metrics": true,
