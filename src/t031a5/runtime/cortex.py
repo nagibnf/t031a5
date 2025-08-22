@@ -133,6 +133,7 @@ class CortexRuntime:
         await self._initialize_conversation_engine()
         
         logger.info("Componentes inicializados com sucesso")
+        return True
     
     def _setup_logging(self):
         """Configura o sistema de logging."""
@@ -204,8 +205,11 @@ class CortexRuntime:
                 logger.info("Inicializando WebSim...")
                 
                 from ..simulators import WebSim
-                # Remove o campo 'enabled' da configuração antes de passar para o WebSim
-                websim_init_config = {k: v for k, v in websim_config.items() if k != "enabled"}
+                # Remove campos não suportados pela classe WebSimConfig
+                supported_fields = ["host", "port", "debug", "auto_reload", "static_dir", "templates_dir", 
+                                  "max_connections", "update_interval", "cors_enabled", "auto_start", "mock_robot"]
+                websim_init_config = {k: v for k, v in websim_config.items() 
+                                    if k in supported_fields}
                 self.websim = WebSim(websim_init_config, self.g1_controller)
                 
                 success = await self.websim.initialize()
@@ -307,17 +311,30 @@ class CortexRuntime:
     
     async def _run_loop(self):
         """Executa uma iteração do loop principal."""
-        # Coleta inputs
-        inputs_data = await self.input_orchestrator.collect_inputs()
+        # Coleta inputs com timeout para evitar travamento
+        try:
+            inputs_data = await asyncio.wait_for(
+                self.input_orchestrator.collect_inputs(), 
+                timeout=5.0
+            )
+        except asyncio.TimeoutError:
+            logger.warning(f"Timeout na coleta de inputs (loop {self.loop_count})")
+            return
         
         if not inputs_data:
             return
         
+        logger.info(f"🎤 {len(inputs_data)} inputs processados - gerando resposta...")
+        
         # Se ConversationEngine está ativo, usa o ciclo de conversação
         if self.conversation_engine:
-            conversation_response = await self.conversation_engine.process_conversation_cycle(inputs_data)
+            # Converte lista de InputData para dicionário por tipo
+            inputs_dict = {data.input_type: data for data in inputs_data}
+            
+            conversation_response = await self.conversation_engine.process_conversation_cycle(inputs_dict)
             
             if conversation_response:
+                logger.info(f"🎭 Executando resposta: {conversation_response.text[:30]}...")
                 # Executa resposta multimodal coordenada
                 await self.conversation_engine.execute_response(conversation_response)
         else:

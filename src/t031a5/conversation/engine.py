@@ -226,28 +226,44 @@ class ConversationEngine:
         """
         try:
             start_time = time.time()
+            self.logger.debug(f"🎤 INÍCIO CONVERSAÇÃO: {len(inputs)} inputs recebidos")
             
             # 1. Análise de inputs
+            self.logger.debug("🔍 Analisando inputs...")
             conversation_data = await self._analyze_inputs(inputs)
             
             if not conversation_data:
+                self.logger.debug("❌ Nenhum dado conversacional extraído")
                 return None
             
+            self.logger.debug(f"✅ Dados conversacionais: {conversation_data}")
+            
             # 2. Atualização de contexto
+            self.logger.debug("📝 Atualizando contexto...")
             await self._update_context(conversation_data, inputs)
             
             # 3. Verificar se precisa responder
-            if not await self._should_respond(conversation_data):
+            self.logger.debug("🤔 Verificando se deve responder...")
+            should_respond = await self._should_respond(conversation_data)
+            if not should_respond:
+                self.logger.debug("❌ Não deve responder agora")
                 return None
+            
+            self.logger.debug("✅ Deve responder - gerando resposta...")
             
             # 4. Gerar resposta via LLM
             self.state = ConversationState.PROCESSING
+            self.logger.debug("🧠 Gerando resposta via LLM...")
             llm_response = await self._generate_llm_response(conversation_data)
             
             if not llm_response:
+                self.logger.debug("❌ LLM não retornou resposta")
                 return None
             
+            self.logger.debug(f"✅ LLM resposta: {llm_response.content[:50]}...")
+            
             # 5. Planejar resposta multimodal
+            self.logger.debug("🎭 Planejando resposta multimodal...")
             response = await self._plan_multimodal_response(llm_response, conversation_data)
             
             # 6. Atualizar métricas
@@ -255,12 +271,12 @@ class ConversationEngine:
             self.total_response_time += response_time
             self.conversations_count += 1
             
-            self.logger.info(f"Resposta gerada em {response_time:.2f}s: {response.text[:50]}...")
+            self.logger.info(f"✅ Resposta gerada em {response_time:.2f}s: {response.text[:50]}...")
             
             return response
             
         except Exception as e:
-            self.logger.error(f"Erro no ciclo de conversação: {e}")
+            self.logger.error(f"❌ Erro no ciclo de conversação: {e}")
             self.state = ConversationState.IDLE
             return None
     
@@ -277,23 +293,33 @@ class ConversationEngine:
         # Análise de voz
         if "G1Voice" in inputs and inputs["G1Voice"]:
             voice_data = inputs["G1Voice"].data
-            if voice_data.get("speech_detected"):
-                conversation_data["voice_input"] = voice_data.get("transcription", "")
+            # Suporta tanto formato mock quanto real
+            speech_detected = voice_data.get("speech_detected") or voice_data.get("is_speech", False)
+            transcript = voice_data.get("transcription") or voice_data.get("transcript") or voice_data.get("text", "")
+            
+            if speech_detected and transcript:
+                conversation_data["voice_input"] = transcript
                 conversation_data["interaction_type"] = "active"
                 conversation_data["urgency"] = voice_data.get("confidence", 0.0)
         
         # Análise visual
         if "G1Vision" in inputs and inputs["G1Vision"]:
             vision_data = inputs["G1Vision"].data
+            
+            # Suporta tanto formato mock quanto real
+            objects = vision_data.get("objects_detected", []) or vision_data.get("objects", [])
+            faces = vision_data.get("faces_detected", []) or vision_data.get("faces", [])
+            
             conversation_data["visual_context"] = {
-                "objects": vision_data.get("objects", []),
-                "faces": vision_data.get("faces", []),
+                "objects": objects,
+                "faces": faces,
                 "scene_analysis": vision_data.get("scene_analysis", {}),
+                "scene_description": vision_data.get("scene_description", ""),
                 "motion_detected": vision_data.get("motion_detected", False)
             }
             
             # Detectar presença humana
-            if vision_data.get("faces") or any(obj.get("type") == "person" for obj in vision_data.get("objects", [])):
+            if faces or any(obj.get("type") == "person" for obj in objects):
                 conversation_data["user_detected"] = True
                 if conversation_data["interaction_type"] == "passive":
                     conversation_data["interaction_type"] = "visual"
