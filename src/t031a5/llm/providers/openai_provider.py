@@ -9,6 +9,7 @@ import logging
 import json
 from typing import Any, Dict, List, Optional
 from datetime import datetime
+from enum import Enum
 
 from ..provider import LLMRequest, LLMResponse, BaseLLMProvider
 from ...fuser.base import FusedData
@@ -343,6 +344,8 @@ class OpenAIProvider(BaseLLMProvider):
         """
         if isinstance(obj, datetime):
             return obj.isoformat()
+        elif isinstance(obj, Enum):
+            return obj.value  # Converte Enum para seu valor
         elif isinstance(obj, dict):
             return {k: self._make_json_safe(v) for k, v in obj.items()}
         elif isinstance(obj, list):

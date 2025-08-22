@@ -854,5 +854,15 @@ class G1StateInput(BaseInput):
         return None
     
     async def _start(self) -> bool:
-        """Implementação do método abstrato."""
-        return await self.start()
+        """Inicia monitoramento de estado específico."""
+        try:
+            # Inicia monitoramento contínuo se necessário
+            if self.enable_monitoring:
+                self.logger.info("Iniciando monitoramento contínuo do G1...")
+            
+            self.logger.info("G1State iniciado com sucesso")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Erro ao iniciar G1State: {e}")
+            return False
